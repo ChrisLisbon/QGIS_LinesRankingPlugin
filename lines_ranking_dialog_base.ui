@@ -125,7 +125,7 @@
        <item row="2" column="0" colspan="3">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Spline treshold (in map units) [optional]</string>
+          <string>Snapping treshold (in map units) [optional]</string>
          </property>
         </widget>
        </item>
