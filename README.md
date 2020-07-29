@@ -8,8 +8,6 @@ The plugin calculates the rank of each segment of the connected river network an
 
 The algorithm is based on constructing a mathematical representation of the network in the form of a graph, taking into account the segment length. The output can be used for visual visualizations and network explorations.
 
-Required dependencies (python libraries): pandas, networkx. $pip install pandas $pip install networkx (for QGIS python interpreter, see docs for details)
-
 ## Requirements
 
 * QGIS 3.14+
