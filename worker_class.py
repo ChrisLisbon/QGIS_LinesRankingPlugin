@@ -40,6 +40,7 @@ class StartScript(QgsTask):
         self.result=None
         self.logText=''
         self.fields_names=fields_names
+        self.error_reason=''
     
     def run(self):
         self.logText='Fixing feometries'
@@ -54,7 +55,7 @@ class StartScript(QgsTask):
                     cleanedLayerPath=clean_gaps(vl, self.cleanTresholdValue) 
                     cleanedLayer=QgsVectorLayer(cleanedLayerPath, 'v_clean')
                 except Exception:
-                    QMessageBox.critical(None, "Error", 'GRASS pakage is not accessible')  
+                    self.error_reason='grass'                      
                     self.logText=''
                     return False      
             else:
@@ -238,6 +239,8 @@ class StartScript(QgsTask):
                 os.remove(self.attributes_file_path)
             except Exception:
                 pass
+            if self.error_reason=='grass':
+                QMessageBox.critical(None, "Error", 'GRASS pakage is not accessible')
         if result is True:
             QMessageBox.information(None, "Success", 'Lines Ranking process is finished')
 
