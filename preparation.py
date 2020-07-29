@@ -108,7 +108,6 @@ def get_lines_intersections(layer, set_progress_funk):
     )
     intersectPointLayer=algorithmOutput["OUTPUT"]             
 
-    #Set geometry field for each point in intersections
     pr = intersectPointLayer.dataProvider() 
     pr.addAttributes([QgsField("geometry",  QVariant.String)]) 
     intersectPointLayer.updateFields()

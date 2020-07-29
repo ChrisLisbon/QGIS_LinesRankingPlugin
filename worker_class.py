@@ -49,15 +49,23 @@ class StartScript(QgsTask):
         else:
             if self.cleanTresholdValue.replace(' ', '')!='':
                 self.setProgress(5)
-                self.logText='Filling gaps (v.clean)'           
-                cleanedLayerPath=clean_gaps(vl, self.cleanTresholdValue)          
-                cleanedLayer=QgsVectorLayer(cleanedLayerPath, 'v_clean')                
+                self.logText='Filling gaps (v.clean)'  
+                try:         
+                    cleanedLayerPath=clean_gaps(vl, self.cleanTresholdValue) 
+                    cleanedLayer=QgsVectorLayer(cleanedLayerPath, 'v_clean')
+                except Exception:
+                    QMessageBox.critical(None, "Error", 'GDAL pakage is not avalible')  
+                    self.logText=''
+                    return False      
             else:
                 pr = vl.dataProvider() 
                 pr.addAttributes([QgsField("fid",  QVariant.Int)])
                 vl.updateFields()                    
                 cleanedLayer=vl
-        buffer_layer=createCleanedBuffer(cleanedLayer)        
+        buffer_layer=createCleanedBuffer(cleanedLayer)
+        buffer_layer.setProviderEncoding(u'UTF-8')
+        buffer_layer.dataProvider().setEncoding(u'UTF-8')
+
         if self.isCanceled():
             return False
         else:
@@ -192,21 +200,22 @@ class StartScript(QgsTask):
                     pass
             outLayer.commitChanges()
             createSpatialIndex(outLayer)
-            outLayerWithAttr=joinAttributes(outLayer, buffer_layer, self.fields_names)
-
+            outLayerWithAttr=joinAttributes(outLayer, buffer_layer, self.fields_names)            
+            outLayerWithAttr.setProviderEncoding(u'UTF-8')
+            outLayerWithAttr.dataProvider().setEncoding(u'UTF-8')
 
         if self.isCanceled():
             return False
         else:
             if self.outLineEdit.replace(' ', '')!='':
-                if self.outLineEdit[-4:]!='.shp':
-                    self.outLineEdit=self.outLineEdit+'.shp'
+                if self.outLineEdit[-5:]!='.gpkg':
+                    self.outLineEdit=self.outLineEdit+'.gpkg'
                 try:
                     QgsVectorFileWriter.writeAsVectorFormat(layer=outLayerWithAttr, 
                                                     fileName=self.outLineEdit, 
                                                     fileEncoding="utf-8", 
-                                                    driverName="ESRI Shapefile")
-                    self.result = QgsVectorLayer(self.outLineEdit, self.outLineEdit.split('/')[-1][:-4], "ogr")  
+                                                    driverName="GPKG")
+                    self.result = QgsVectorLayer(self.outLineEdit, self.outLineEdit.split('/')[-1][:-5], "ogr")  
                 except Exception as e:
                     pass
             else:
@@ -230,7 +239,7 @@ class StartScript(QgsTask):
             except Exception:
                 pass
         if result is True:
-            QMessageBox.information(None, "Success", 'Lines Ranking process')
+            QMessageBox.information(None, "Success", 'Lines Ranking process is finished')
 
 class Worker(QObject):
     def __init__(self, qapp, selectedLayer, pt, cleanTresholdValue, outLineEdit, QgsProject, prBar, logTxtLine, fields_names):

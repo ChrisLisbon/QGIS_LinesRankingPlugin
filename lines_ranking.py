@@ -122,11 +122,18 @@ class LinesRanking:
         self.dlg.lineEdit.setText(filename)
 
     def select_input_point_file(self):
-        filename, _filter = QFileDialog.getOpenFileName(self.dlg, "Select output file ","", '*')
+        filename, _filter = QFileDialog.getOpenFileName(self.dlg, "Select input file ","", '*')
         if filename!='':
             self.dlg.comboBox_2.addItems([filename])
             allItems = [self.dlg.comboBox_2.itemText(i) for i in range(self.dlg.comboBox_2.count())]
             self.dlg.comboBox_2.setCurrentIndex(allItems.index(filename))
+
+    def select_input_lines_file(self):
+        filename, _filter = QFileDialog.getOpenFileName(self.dlg, "Select input file ","", '*')
+        if filename!='':
+            self.dlg.comboBox.addItems([filename])
+            allItems = [self.dlg.comboBox.itemText(i) for i in range(self.dlg.comboBox_2.count())]
+            self.dlg.comboBox.setCurrentIndex(allItems.index(filename))
     
     def set_point_coordinates(self, point, button):
         coordinates_string=point.asWkt()[6:-2].replace(' ', ',')
@@ -231,6 +238,7 @@ class LinesRanking:
             self.dlg.pushButton.clicked.connect(self.select_output_file)
             self.dlg.pushButton_2.clicked.connect(self.select_point_from_map)
             self.dlg.pushButton_5.clicked.connect(self.select_input_point_file)
+            self.dlg.pushButton_6.clicked.connect(self.select_input_lines_file)
             self.dlg.pushButton_3.clicked.connect(self.add_task)
             self.dlg.pushButton_4.clicked.connect(self.exit_dialog)
             self.dlg.radioButton.toggled.connect(self.radio1_clicked)
@@ -278,13 +286,19 @@ class LinesRanking:
 
     ### Start processing function ###
     def add_task(self):
+        selectedLayer=None
         selectedLayerIndex = self.dlg.comboBox.currentIndex()
         cleanTresholdValue = self.dlg.lineEdit_3.text()
         outLineEdit=self.dlg.lineEdit.text()
         prBar=self.dlg.progressBar
         logTxtLine=self.dlg.label_9
-        if selectedLayerIndex!=-1:
-            selectedLayer = self.filtered_layers[selectedLayerIndex].layer()            
+        if selectedLayerIndex<=len(self.filtered_layers)-1:
+            selectedLayer = self.filtered_layers[selectedLayerIndex].layer()
+        if selectedLayerIndex>len(self.filtered_layers)-1: 
+            selectedLayer =  QgsVectorLayer(self.dlg.comboBox.currentText(), self.dlg.comboBox.currentText().split('/')[-1].split('.')[0], "ogr")        
+        if selectedLayer!=None:
+            selectedLayer.setProviderEncoding(u'UTF-8')
+            selectedLayer.dataProvider().setEncoding(u'UTF-8')
             pt=self.get_point_coordinates()
             if self.dlg.checkBox.isChecked():
                 fields_names=[]
