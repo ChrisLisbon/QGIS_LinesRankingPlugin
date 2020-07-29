@@ -1,3 +1,5 @@
+![ranking.png](https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ranking.png)
+
 # Lines ranking (QGIS)
 
 QGIS plugin for ranking lines features based on the position of starting point
