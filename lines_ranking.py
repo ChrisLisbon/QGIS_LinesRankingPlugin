@@ -118,7 +118,7 @@ class LinesRanking:
 ######################################################################################
 
     def select_output_file(self):
-        filename, _filter = QFileDialog.getSaveFileName(self.dlg, "Select output file ","", '*.shp')
+        filename, _filter = QFileDialog.getSaveFileName(self.dlg, "Select output file ","", '*.gpkg')
         self.dlg.lineEdit.setText(filename)
 
     def select_input_point_file(self):

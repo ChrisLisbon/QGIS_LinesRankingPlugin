@@ -54,7 +54,7 @@ class StartScript(QgsTask):
                     cleanedLayerPath=clean_gaps(vl, self.cleanTresholdValue) 
                     cleanedLayer=QgsVectorLayer(cleanedLayerPath, 'v_clean')
                 except Exception:
-                    QMessageBox.critical(None, "Error", 'GDAL pakage is not avalible')  
+                    QMessageBox.critical(None, "Error", 'GRASS pakage is not accessible')  
                     self.logText=''
                     return False      
             else:
