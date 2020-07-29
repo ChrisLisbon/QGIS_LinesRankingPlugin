@@ -15,6 +15,12 @@ Required dependencies (python libraries): pandas, networkx. $pip install pandas 
 * QGIS 3.14+
 * Python libraries: networkx, pandas
 
+### How to install plugin:
+
+This plugin is available in official QGIS plugins repository - use menu Modules in QGIS 3.14+ to find it.
+
+Alternatively you can download code from this repository and put it in directory lines_ranking in your local QGIS plugins folder.
+
 ### How to install requirements:
 
 #### Linux
