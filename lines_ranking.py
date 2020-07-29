@@ -210,34 +210,11 @@ class LinesRanking:
 
     def link(self, linkStr):
         QDesktopServices.openUrl(QUrl(linkStr))
-
-    ### Start processing function ###
-    def add_task(self):
-        selectedLayerIndex = self.dlg.comboBox.currentIndex()
-        cleanTresholdValue = self.dlg.lineEdit_3.text()
-        outLineEdit=self.dlg.lineEdit.text()
-        prBar=self.dlg.progressBar
-        logTxtLine=self.dlg.label_9
-        if selectedLayerIndex!=-1:
-            selectedLayer = self.filtered_layers[selectedLayerIndex].layer()            
-            pt=self.get_point_coordinates()
-            if self.dlg.checkBox.isChecked():
-                fields_names=[]
-                fields_names.append(self.dlg.lineEdit_4.text().replace(' ', ''))
-                fields_names.append(self.dlg.lineEdit_5.text().replace(' ', ''))
-                fields_names.append(self.dlg.lineEdit_6.text().replace(' ', ''))
-            else:
-                fields_names=['Rank', 'Value', 'Distance']
-            if fields_names[0]!= '' and fields_names[1]!= '' and fields_names[2]!= '':
-                if pt!=None:
-                    ### QgsTask class call ### 
-                    self.m = Worker(QgsApplication, selectedLayer, pt, cleanTresholdValue, outLineEdit, QgsProject, prBar, logTxtLine, fields_names)
-                    self.m.StartScriptTask()
-
-    def run(self):
-        
+    
+    def run(self):        
         try:
             from .worker_class import Worker
+            self.Worker = Worker
         except ModuleNotFoundError:
             QMessageBox.critical(None, "Error", 'Required dependencies are not met. You should install python libraries networkx and pandas, see docs for details.')
             return None
@@ -250,7 +227,7 @@ class LinesRanking:
             self.dlg.comboBox_2.setDisabled(True)
             self.dlg.pushButton_5.setDisabled(True)
             self.dlg.label_8.linkActivated.connect(self.link)
-            self.dlg.label_8.setText('<a href="https://github.com/Dreamlone/State_Hydrological_Institute/blob/master/River_ranking.ipynb">Source code page</a>')
+            self.dlg.label_8.setText('<a href="https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin">Source code page</a>')
             self.dlg.pushButton.clicked.connect(self.select_output_file)
             self.dlg.pushButton_2.clicked.connect(self.select_point_from_map)
             self.dlg.pushButton_5.clicked.connect(self.select_input_point_file)
@@ -299,6 +276,27 @@ class LinesRanking:
                     pass
                 self.m=None
 
-                
+    ### Start processing function ###
+    def add_task(self):
+        selectedLayerIndex = self.dlg.comboBox.currentIndex()
+        cleanTresholdValue = self.dlg.lineEdit_3.text()
+        outLineEdit=self.dlg.lineEdit.text()
+        prBar=self.dlg.progressBar
+        logTxtLine=self.dlg.label_9
+        if selectedLayerIndex!=-1:
+            selectedLayer = self.filtered_layers[selectedLayerIndex].layer()            
+            pt=self.get_point_coordinates()
+            if self.dlg.checkBox.isChecked():
+                fields_names=[]
+                fields_names.append(self.dlg.lineEdit_4.text().replace(' ', ''))
+                fields_names.append(self.dlg.lineEdit_5.text().replace(' ', ''))
+                fields_names.append(self.dlg.lineEdit_6.text().replace(' ', ''))
+            else:
+                fields_names=['Rank', 'Value', 'Distance']
+            if fields_names[0]!= '' and fields_names[1]!= '' and fields_names[2]!= '':
+                if pt!=None:
+                    ### QgsTask class call ### 
+                    self.m = self.Worker(QgsApplication, selectedLayer, pt, cleanTresholdValue, outLineEdit, QgsProject, prBar, logTxtLine, fields_names)
+                    self.m.StartScriptTask()            
 
                 

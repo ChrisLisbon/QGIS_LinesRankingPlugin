@@ -423,7 +423,6 @@ def overall_call(original_file, attributes_file, start_point_id, length_path, se
     rank_set(G, str(start_point_id), str(last_vertex), set_progress_funk)
     iter_set_values(G, str(start_point_id))
     dataframe = make_dataframe(G)
-    print(dataframe.head(5))
     rivers = pd.read_csv(original_file)
     rivers = rivers.astype({'fid': 'str'})
     data_merged = pd.merge(rivers, dataframe, on='fid')

@@ -42,3 +42,7 @@ Open OSGeo4W Shell and run commands:
 `$ pip install pandas`
 
 `$ pip install networkx`
+
+## Additional materials 
+
+* Jupiter notebook with processing code
