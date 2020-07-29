@@ -240,7 +240,7 @@ class StartScript(QgsTask):
             except Exception:
                 pass
             if self.error_reason=='grass':
-                QMessageBox.critical(None, "Error", 'GRASS pakage is not accessible')
+                QMessageBox.critical(None, "Error", 'GRASS modules are not available. Activate GRASS or leave snapping threshold empty')
         if result is True:
             QMessageBox.information(None, "Success", 'Lines Ranking process is finished')
 
