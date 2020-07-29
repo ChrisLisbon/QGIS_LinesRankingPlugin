@@ -47,4 +47,4 @@ Open OSGeo4W Shell and run commands:
 
 ## Additional materials 
 
-* Jupiter notebook with processing code
+* [Jupyter notebook with processing code](https://github.com/Dreamlone/State_Hydrological_Institute/blob/master/River_ranking.ipynb)
