@@ -1,3 +1,5 @@
+![ranking.png](https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ranking.png)
+
 # Lines ranking (QGIS)
 
 QGIS plugin for ranking lines features based on the position of starting point
@@ -45,4 +47,4 @@ Open OSGeo4W Shell and run commands:
 
 ## Additional materials 
 
-* Jupiter notebook with processing code
+* [Jupyter notebook with processing code](https://github.com/Dreamlone/State_Hydrological_Institute/blob/master/River_ranking.ipynb)
