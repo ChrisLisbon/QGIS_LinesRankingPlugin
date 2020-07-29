@@ -1,0 +1,23 @@
+[general]
+name=Lines Ranking
+qgisMinimumVersion=3.14
+description=Plugin for ranking lines features based on the position of starting point
+version=1.0
+author=Julia Borisova, Mikhail Sarafanov 
+email=yulashka.htm@yandex.ru, mik_sar@mail.ru
+
+about=The plugin calculates the rank of each segment of the connected river network and the number of tributaries flowing into the segment.
+      The algorithm is based on constructing a mathematical representation of the network in the form of a graph, taking into account the segment length. The output can be used for visual visualizations and network explorations.
+      Required dependencies (python libraries): pandas, networkx. $pip install pandas $pip install networkx (for QGIS python interpreter, see docs for details)
+
+tracker=https://
+repository=https://
+
+hasProcessingProvider=no
+tags=network, network ranking, lines, lines ranking, vector 
+homepage=https://github.com/Dreamlone/State_Hydrological_Institute/blob/master/River_ranking_2.ipynb
+category=Vector
+icon=icon.png
+experimental=False
+deprecated=False
+server=False
