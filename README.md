@@ -48,3 +48,11 @@ Open OSGeo4W Shell and run commands:
 ## Additional materials 
 
 * [Jupyter notebook with processing code](https://github.com/Dreamlone/State_Hydrological_Institute/blob/master/River_ranking.ipynb)
+
+## Contacts
+
+Feel free to contact us:
+
+Julia Borisova | yulashka.htm@yandex.ru
+
+Mikhail Sarafanov | mik_sar@mail.ru
