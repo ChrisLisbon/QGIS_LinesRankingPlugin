@@ -26,7 +26,9 @@ Choose start point and launch the algorithm:
 
 ## Shreve stream order
 
-In progress 
+Visualize "Rank" column and prepare a map
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/shreve_order_ob.png" width="750"/>
 
 ## Strahler stream order
 
