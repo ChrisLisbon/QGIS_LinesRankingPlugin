@@ -7,7 +7,7 @@ authors = ["Dreamlone <mik_sar@mail.ru>"]
 [tool.poetry.dependencies]
 python = "^3.7"
 mkdocs = "^1.4.3"
-Jinja2 = "3.0.3"
+Jinja2 = "3.0.0"
 
 [tool.poetry.dev-dependencies]
 
