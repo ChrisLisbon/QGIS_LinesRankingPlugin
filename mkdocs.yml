@@ -1,6 +1,6 @@
 site_name: linesranking
 site_url: https://linesranking.readthedocs.io/en/latest/
-site_author: Dreamlone & ChrisLisbon
+site_author: ChrisLisbon & Dreamlone
 repo_url: https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin
 
 nav:
@@ -8,10 +8,14 @@ nav:
     - How to use:
           - 'Installation': 'usage/install.md'
           - 'Functionality review': 'usage/functionality_review.md'
+          - 'River use case': 'usage/river_case.md'
+          - 'Railways use case': 'usage/rails_case.md'
     - Theoretical issues:
           - 'Vector data': 'theoretical/vector_data.md'
-          - 'HTTP connector': 'theoretical/2_http.md'
-          - 'MQTT connector': 'theoretical/3_mqtt.md'
+          - 'Preprocessing': 'theoretical/preprocessing.md'
+          - 'Graphs': 'theoretical/graphs.md'
+          - 'Ranking': 'theoretical/algorithm.md'
+    - 'About us': 'about.md'
 theme:
     name: readthedocs
-    logo: https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/logo_simple.png
+    logo: https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/logo_simple.png
