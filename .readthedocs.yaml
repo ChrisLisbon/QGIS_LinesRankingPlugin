@@ -15,7 +15,7 @@ build:
       # Install poetry
       # https://python-poetry.org/docs/#installing-manually
       - pip install poetry
-      - poetry config virtualenvs.create true
+      - poetry config virtualenvs.create false
 
 mkdocs:
   configuration: mkdocs.yml
