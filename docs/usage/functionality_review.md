@@ -81,6 +81,6 @@ if you are interested in distance in meters, use the "Distance" attribute to vis
 `rank_attributes` - `Properties` - `Symbology` - `Graduated`. Then choose 'Distance' field for `Value`
 and 'Color' for `Method` and click `Classify`: 
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/results_vis_rank.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/results_vis_distance.png" width="750"/>
 
 With the help of assigned ranks you can determine how far the river section (segment) is located from the estuary - in terms of the actual distance metrics. 
