@@ -1,14 +1,13 @@
 [tool.poetry]
-name = "qgis_linesrankingplugin"
+name = "qgis_linesrankingplugin-new"
 version = "0.1.0"
 description = ""
 authors = ["Dreamlone <mik_sar@mail.ru>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
-mkdocs = "1.1.1"
-Jinja2 = "2.11.1"
-contextfilter = "^0.3.0"
+python = "^3.10"
+Jinja2 = "3.0.3"
+mkdocs = "^1.4.3"
 
 [tool.poetry.dev-dependencies]
 
