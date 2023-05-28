@@ -28,7 +28,7 @@ where the river flows into the ocean. Then the following results obtained:
 ## Usage example (Select layer) 
 
 You can also use a one-point vector layer to assign the starting point run the algorithm.
-We can use `start_point_example`.
+We can use `start_point_example`. Re-project the layer: `Processing` - `Toolbox` - `Reproject layer` - assign "WGS 84 / UTM zone 49N".
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/start_point_layer.png" width="750"/>
 
