@@ -5,7 +5,7 @@ Welcome to [QGIS Lines Ranking plugin](https://github.com/ChrisLisbon/QGIS_Lines
 ## Applications
 
 The plugin can be used to rank any linear vector layers. 
-One of the most common cases in which it can be used is river network analysis:
+One of the most common cases in which it can be used is river network analysis (mainly - **stream ordering**):
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/application.png" width="750"/>
 

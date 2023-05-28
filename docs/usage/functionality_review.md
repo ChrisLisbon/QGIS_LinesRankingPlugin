@@ -27,13 +27,20 @@ where the river flows into the ocean. Then the following results obtained:
 
 ## Usage example (Select layer) 
 
+You can also use a one-point vector layer to assign the starting point run the algorithm.
+We can use `start_point_example`.
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/start_point_layer.png" width="750"/>
+
 ## Results overview 
 
 The plugin creates a new vector layer in which the following fields (in attributes table) appear:
 
-- Rank
-- Value
-- Distance
+- **Value** - total number of tributaries. You can consider this value as "[Shreve stream order](https://en.wikipedia.org/wiki/Stream_order)". 
+- **Rank** - distance to the segment from the starting point in a categorized form: rank 1 means 
+  that this segment is adjacent to the starting point. rank 2 are those adjacent to segments 
+  with rank 1, etc. This coefficient can be considered the inverse of the "[Straghler order](https://en.wikipedia.org/wiki/Strahler_number)"
+- **Distance** - distance to the segment from the starting point
 
 All three new fields can be seen in the attribute table: `rank_attributes` - `Open Attribute Table`.
 
@@ -50,6 +57,11 @@ To fix this, pay attention to the algorithm parameter `Snapping threshold (in ma
 We can set the number to 500 meters, for example, and then all layer gaps that do not exceed 500 meters will be combined:
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/th_500.png" width="750"/>
+
+You may also notice that the structure of the vector layer has changed. For example, instead of large vector layer elements, several small ones have appeared. This is also normal!
+The plugin splits the source layer into segments, so the result is presented as a segmented layer. 
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/segments_split.png" width="750"/>
 
 ## Visualization 
 
