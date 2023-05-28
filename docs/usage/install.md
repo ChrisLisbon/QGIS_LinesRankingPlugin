@@ -1,7 +1,7 @@
 # Installation
 
 First, you will need install QGIS on your computer - follow this link for installation files 
-and guide: https://qgis.org/en/site/forusers/download.html 
+and guide: [https://qgis.org/en/site/forusers/download.html](https://qgis.org/en/site/forusers/download.html)
 
 Then there is a need to install a plugin. Go to `Plugins` - `Manage and Install Plugins`
 
