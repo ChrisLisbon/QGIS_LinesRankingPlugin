@@ -35,3 +35,4 @@ def test_adjacency_list_preparation_with_non_int_indices():
 
     assert len(lines) == 2
     assert f'index{INTERMEDIATE_REPLACEMENT}1 index{INTERMEDIATE_REPLACEMENT}2' == lines[0]
+
