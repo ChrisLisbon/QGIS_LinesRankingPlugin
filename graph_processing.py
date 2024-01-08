@@ -20,81 +20,131 @@
 """
 
 import warnings
+
+from core.load import load_attributes_file_as_adjacency_list, \
+    adjacency_list_to_desired_format
+
 warnings.filterwarnings('ignore')
 import numpy as np
-import matplotlib.pyplot as plt
 import math
 import pandas as pd
 import random
 import time
 import networkx as nx
 
-# Function for bringing the adjacency list to the right format
-def prepare(list_of_adjacencies):
-    lines = []
-    for i in list_of_adjacencies:
-        i_0 = str(i[0])
-        i_1 = str(i[1])
-        string = i_0 + ' ' + i_1
-        lines.append(string)
-    return(lines)
 
 # Function for assigning weights to graph edges
-def distance_attr(G, start, dataframe):
+def distance_attr(graph, start, dataframe, id_field, main_id=None):
     # List of all vertexes that can be reached from the start vertex using BFS
-    vert_list = list(nx.bfs_successors(G, source=start))
+    vert_list = list(nx.bfs_successors(graph, source=start))
     # One of the most remote vertices in the graph (this will be necessary for A*)
     last_vertex = vert_list[-1][-1][0]
 
     for component in vert_list:
-        vertex = component[0]  # The vertex where we are at this iteration
-        neighbors = component[1]  # Vertices that are neighboring (which we haven't visited yet)
+        # The vertex where we are at this iteration
+        vertex = component[0]
+        # Vertices that are neighboring (which we haven't visited yet)
+        neighbors = component[1]
 
-        dist_vertex = int(dataframe['length'][dataframe['id'] == vertex])
+        dist_vertex = int(dataframe['length'][dataframe[id_field] == vertex])
+
         # Assign the segment length value as a vertex attribute
         attrs = {vertex: {'component': 1, 'size': dist_vertex}}
-        nx.set_node_attributes(G, attrs)
+        nx.set_node_attributes(graph, attrs)
 
         for n in neighbors:
-            # Assign weights to the edges of the graph
-            # The length of the section in meters (int)
-            dist_n = int(dataframe['length'][dataframe['id'] == n])
+
+            # If the main index value is not set
+            if main_id is None:
+                # Assign weights to the edges of the graph
+                # The length of the section in meters (int)
+                dist_n = int(dataframe['length'][dataframe[id_field] == n])
+                # Otherwise we are dealing with a complex composite index
+            else:
+                # If the vertex we are at is part of the main river
+                if vertex.split(':')[0] == main_id:
+                    # And at the same time, the vertex that we "look" at from
+                    # the vertex "vertex" also, then
+                    if n.split(':')[0] == main_id:
+                        # The weight value must be zero
+                        dist_n = 0
+                    else:
+                        dist_n = int(
+                            dataframe['length'][dataframe[id_field] == n])
+                else:
+                    dist_n = int(dataframe['length'][dataframe[id_field] == n])
             attrs = {(vertex, n): {'weight': dist_n},
                      (n, vertex): {'weight': dist_n}}
-            nx.set_edge_attributes(G, attrs)
+            nx.set_edge_attributes(graph, attrs)
 
             # Assign attributes to the nodes of the graph
             attrs = {n: {'component': 1, 'size': dist_n}}
-            nx.set_node_attributes(G, attrs)
+            nx.set_node_attributes(graph, attrs)
 
         # Look at the surroundings of the vertex where we are located
-        offspring = list(nx.bfs_successors(G, source=vertex, depth_limit=1))
+        offspring = list(nx.bfs_successors(graph, source=vertex, depth_limit=1))
         offspring = offspring[0][1]
         # If the weight value was not assigned, we assign it
         for n in offspring:
 
-            if len(G.get_edge_data(vertex, n)) == 0:
-                dist_n = int(dataframe['length'][dataframe['id'] == n])
-                attrs = {(vertex, n): {'weight': dist_n},
-                         (n, vertex): {'weight': dist_n}}
-                nx.set_edge_attributes(G, attrs)
-            elif len(G.get_edge_data(n, vertex)) == 0:
-                dist_n = int(dataframe['length'][dataframe['id'] == n])
-                attrs = {(vertex, n): {'weight': dist_n},
-                         (n, vertex): {'weight': dist_n}}
-                nx.set_edge_attributes(G, attrs)
+            if len(graph.get_edge_data(vertex, n)) == 0:
 
-    for vertex in list(G.nodes()):
-        # If the graph is incompletely connected, then we delete the elements that we can't get to
-        if G.nodes[vertex].get('component') == None:
-            G.remove_node(vertex)
+                ##############################
+                # Assigning weights to edges #
+                ##############################
+                if main_id is None:
+                    dist_n = int(dataframe['length'][dataframe[id_field] == n])
+                else:
+                    if vertex.split(':')[0] == main_id:
+                        if n.split(':')[0] == main_id:
+                            dist_n = 0
+                        else:
+                            dist_n = int(
+                                dataframe['length'][dataframe[id_field] == n])
+                    else:
+                        dist_n = int(dataframe['length'][dataframe[id_field] == n])
+                attrs = {(vertex, n): {'weight': dist_n},
+                         (n, vertex): {'weight': dist_n}}
+                nx.set_edge_attributes(graph, attrs)
+                ##############################
+                # Assigning weights to edges #
+                ##############################
+
+            elif len(graph.get_edge_data(n, vertex)) == 0:
+
+                ##############################
+                # Assigning weights to edges #
+                ##############################
+                if main_id is None:
+                    dist_n = int(dataframe['length'][dataframe[id_field] == n])
+                else:
+                    if vertex.split(':')[0] == main_id:
+                        if n.split(':')[0] == main_id:
+                            dist_n = 0
+                        else:
+                            dist_n = int(dataframe['length'][dataframe[id_field] == n])
+                    else:
+                        dist_n = int(dataframe['length'][dataframe[id_field] == n])
+
+                attrs = {(vertex, n): {'weight': dist_n},
+                         (n, vertex): {'weight': dist_n}}
+                nx.set_edge_attributes(graph, attrs)
+                ##############################
+                # Assigning weights to edges #
+                ##############################
+
+    for vertex in list(graph.nodes()):
+        # If the graph is incompletely connected, then we delete the
+        # elements that we can't get to
+        if graph.nodes[vertex].get('component') is None:
+            graph.remove_node(vertex)
         else:
             pass
-    return (last_vertex)
+    return last_vertex
+
 
 # Function for assigning 'rank' and 'offspring' attributes to graph vertices
-def rank_set(G, start, last_vertex, set_progress_funk):
-
+def rank_set(G, start, last_vertex):
     # Traversing a graph with attribute assignment
     # G           --- graph as a networkx object
     # vertex      --- vertex from which the graph search begins
@@ -111,7 +161,8 @@ def rank_set(G, start, last_vertex, set_progress_funk):
                 pass
             else:
                 # For all other vertexes, we delete edges
-                kernel_n = list(nx.bfs_successors(G_copy, source=kernel_vertex, depth_limit=1))
+                kernel_n = list(nx.bfs_successors(G_copy, source=kernel_vertex,
+                                                  depth_limit=1))
                 kernel_n = kernel_n[0][1]
                 for i in kernel_n:
                     try:
@@ -130,7 +181,8 @@ def rank_set(G, start, last_vertex, set_progress_funk):
         ############################################################################
         for component in all_neighbors:
             v = component[0]  # The vertex where we are at this iteration
-            neighbors = component[1]  # Vertices that are neighboring (which we haven't visited yet)
+            neighbors = component[
+                1]  # Vertices that are neighboring (which we haven't visited yet)
 
             # Value of the 'rank' attribute in the considering vertex
             att = G.nodes[v].get('rank')
@@ -167,7 +219,8 @@ def rank_set(G, start, last_vertex, set_progress_funk):
             # Additional "search"
             for neighbor in neighbors:
                 # We look at all the closest first offspring
-                first_n = list(nx.bfs_successors(G, source=neighbor, depth_limit=1))
+                first_n = list(
+                    nx.bfs_successors(G, source=neighbor, depth_limit=1))
                 first_n = first_n[0][1]
 
                 for i in first_n:
@@ -184,33 +237,37 @@ def rank_set(G, start, last_vertex, set_progress_funk):
                         else:
                             pass
 
-    a_path = list(nx.astar_path(G, source=start, target=last_vertex, weight='weight'))
+                            # Finding the shortest path A* - building a route around which we will build the next searchs
+
+    a_path = list(
+        nx.astar_path(G, source=start, target=last_vertex, weight='weight'))
 
     ##############################
     #   Route validation block   #
     ##############################
     true_a_path = []
     for index, V in enumerate(a_path):
-
         if index == 0:
             true_a_path.append(V)
         elif index == (len(a_path) - 1):
             true_a_path.append(V)
         else:
             # Previous and next vertices for the reference path (a_path)
-            V_prev = a_path[index - 1]
-            V_next = a_path[index + 1]
+            v_prev = a_path[index - 1]
+            v_next = a_path[index + 1]
 
             # Which vertexes are adjacent to this one
-            V_prev_neighborhood = list(nx.bfs_successors(G, source=V_prev, depth_limit=1))
-            V_prev_neighborhood = V_prev_neighborhood[0][1]
-            V_next_neighborhood = list(nx.bfs_successors(G, source=V_next, depth_limit=1))
-            V_next_neighborhood = V_next_neighborhood[0][1]
+            v_prev_neighborhood = list(
+                nx.bfs_successors(G, source=v_prev, depth_limit=1))
+            v_prev_neighborhood = v_prev_neighborhood[0][1]
+            v_next_neighborhood = list(
+                nx.bfs_successors(G, source=v_next, depth_limit=1))
+            v_next_neighborhood = v_next_neighborhood[0][1]
 
             # If the next and previous vertices are connected to each other without an intermediary
             # in the form of vertex V, then vertex V is excluded from the reference path
-            if any(V_next == VPREV for VPREV in V_prev_neighborhood):
-                if any(V_prev == VNEXT for VNEXT in V_next_neighborhood):
+            if any(v_next == VPREV for VPREV in v_prev_neighborhood):
+                if any(v_prev == VNEXT for VNEXT in v_next_neighborhood):
                     pass
                 else:
                     true_a_path.append(V)
@@ -222,20 +279,15 @@ def rank_set(G, start, last_vertex, set_progress_funk):
 
     # Verification completed
     a_path = true_a_path
-    RANK = 1
+    rank = 1
     for v in a_path:
         # Assign the attribute rank value - 1 to the starting vertex. The further away, the greater the value
-        attrs = {v: {'rank': RANK}}
+        attrs = {v: {'rank': rank}}
         nx.set_node_attributes(G, attrs)
-        RANK += 1
+        rank += 1
 
     # The main route is ready, then we will iteratively move from each node
-    all_f = len(a_path)
     for index, vertex in enumerate(a_path):
-
-        progress = 58 + (index * 30) / all_f
-        set_progress_funk(progress)
-
         # Starting vertex
         if index == 0:
             next_vertex = a_path[index + 1]
@@ -248,6 +300,7 @@ def rank_set(G, start, last_vertex, set_progress_funk):
 
             # Connect vertices back
             G.add_edge(vertex, next_vertex)
+
 
         # Finishing vertex
         elif index == (len(a_path) - 1):
@@ -268,63 +321,64 @@ def rank_set(G, start, last_vertex, set_progress_funk):
             next_vertex = a_path[index + 1]
 
             # Disconnect vertices
-            G.remove_edge(prev_vertex, vertex)
-            G.remove_edge(vertex, next_vertex)
+            # Previous with current vertex
+            try:
+                G.remove_edge(prev_vertex, vertex)
+            except Exception:
+                pass
+            # Current with next vertex
+            try:
+                G.remove_edge(vertex, next_vertex)
+            except Exception:
+                pass
 
             # Subgraph BFS block
             bfs_attributes(G, vertex=vertex, kernel_path=a_path)
 
             # Connect vertices back
-            G.add_edge(prev_vertex, vertex)
-            G.add_edge(vertex, next_vertex)
+            try:
+                G.add_edge(prev_vertex, vertex)
+                G.add_edge(vertex, next_vertex)
+            except Exception:
+                pass
 
     # Attribute assignment block - number of descendants
     vert_list = list(nx.bfs_successors(G, source=start))
     for component in vert_list:
         vertex = component[0]  # The vertex where we are at this iteration
-        neighbors = component[1]  # Vertices that are neighboring (which we haven't visited yet)
+        neighbors = component[
+            1]  # Vertices that are neighboring (which we haven't visited yet)
 
         # Adding an attribute - the number of descendants of this vertex
         n_offspring = len(neighbors)
         attrs = {vertex: {'offspring': n_offspring}}
         nx.set_node_attributes(G, attrs)
 
-# Function for determining the order of river segments similar to the Shreve method
-# In addition, the "distance" attribute is assigned
-def set_values(G, start, iteration):
-    # List of all vertexes that can be reached from the start vertex using BFS
-    vert_list = list(nx.bfs_successors(G, source=start))
 
-    # Cycle search of the graph by labeling the vertices
-    # Each component is a subgraph
-    for component in vert_list:
-        vertex = component[0]  # The vertex where we are at this iteration
-        neighbors = component[1]  # Vertices that are neighboring (which we haven't visited yet)
+def set_values(graph, start, considering_rank, vert_list):
+    # For each vertex in the list
+    for vertex in vert_list:
 
-        att_rank = G.nodes[vertex].get('rank')
-        att_offspring = G.nodes[vertex].get('offspring')
-
-        # For the closing segment, perform the following procedure:
-        if att_rank == 1:
-
-            # Length of this segment
-            att_vertex_size = G.nodes[vertex].get('size')
-            # Adding the value of the distance attribute
-            attrs = {vertex: {'distance': att_vertex_size}}
-            nx.set_node_attributes(G, attrs)
-
+        # If value has already been assigned, then skip it
+        if graph.nodes[vertex].get('value') == 1:
+            pass
+        else:
             # Defining descendants
-            offspring = list(nx.bfs_successors(G, source=vertex, depth_limit=1))
+            offspring = list(nx.bfs_successors(graph, source=vertex, depth_limit=1))
             # We use only the nearest neighbors to this vertex (first descendants)
             offspring = offspring[0][1]
 
-            # Writing the values of the value attributes for all descendants to the list
+            # The cycle of determining the values at the vertices of a descendant
             last_values = []
             for child in offspring:
-                if G.nodes[child].get('value') != None:
-                    last_values.append(G.nodes[child].get('value'))
+                # We only need descendants whose rank value is greater than that of the vertex
+                if graph.nodes[child].get('rank') > considering_rank:
+                    if graph.nodes[child].get('value') != None:
+                        last_values.append(graph.nodes[child].get('value'))
+                    else:
+                        pass
                 else:
-                    last_values.append(0)
+                    pass
 
             last_values = np.array(last_values)
             sum_values = np.sum(last_values)
@@ -332,102 +386,110 @@ def set_values(G, start, iteration):
             # If the amount is not equal to 0, the attribute is assigned
             if sum_values != 0:
                 attrs = {vertex: {'value': sum_values}}
-                nx.set_node_attributes(G, attrs)
-            # Otherwise, the algorithm just hasn't reached it yet, so skip it
+                nx.set_node_attributes(graph, attrs)
             else:
                 pass
 
-        # For each neighbor, we assign an attribute
-        for i in neighbors:
-            # Value of attributes in the considering vertex
-            att_rank = G.nodes[i].get('rank')
-            att_offspring = G.nodes[i].get('offspring')
-
-            # If no descendants were found for a vertex at the previous stage, it is assigned the value 1
-            if att_offspring == None:
-                attrs = {i: {'value': 1}}
-                nx.set_node_attributes(G, attrs)
-                # If a vertex has descendants, we should define the values of the "value" attribute in them
-            else:
-                # We search for all descendants
-                offspring = list(nx.bfs_successors(G, source=i, depth_limit=1))
-                # We use only the nearest neighbors to this vertex (first descendants)
-                offspring = offspring[0][1]
-
-                # The cycle of determining the values at the vertices of a descendant
-                last_values = []
-                for child in offspring:
-                    # We only need descendants whose rank value is greater than that of the vertex in question
-                    if G.nodes[child].get('rank') > att_rank:
-                        if G.nodes[child].get('value') != None:
-                            last_values.append(G.nodes[child].get('value'))
-                        else:
-                            pass
-                    else:
-                        pass
-
-                last_values = np.array(last_values)
-                sum_values = np.sum(last_values)
-
-                # If the amount is not equal to 0, the attribute is assigned
-                if sum_values != 0:
-                    attrs = {i: {'value': sum_values}}
-                    nx.set_node_attributes(G, attrs)
-                # Otherwise, the algorithm just hasn't reached it yet, so skip it
-                else:
-                    pass
-
-            # This calculation is made only in the first iteration
-            if iteration == 0:
-                vertex_distance = G.nodes[vertex].get('distance')
-
-                # Adding the value of the distance attribute
-                i_size = G.nodes[i].get('size')
-                attrs = {i: {'distance': (vertex_distance + i_size)}}
-                nx.set_node_attributes(G, attrs)
 
 # Function for iteratively assigning the value attribute
-def iter_set_values(G, start):
-    # Defining the maximum value of the rank in this graph
-    ranks = []
-    for vertex in list(G.nodes()):
-        ranks.append(G.nodes[vertex].get('rank'))
-    max_rank = max(ranks)
+def iter_set_values(graph, start):
+    # Vertices and corresponding attribute values
+    ranks_list = []
+    vertices_list = []
+    offspring_list = []
+    for vertex in list(graph.nodes()):
+        ranks_list.append(graph.nodes[vertex].get('rank'))
+        vertices_list.append(vertex)
+        att_offspring = graph.nodes[vertex].get('offspring')
 
-    # We must integrate exactly as many times as there are ranks in the graph
-    for iteration in range(0, max_rank):
-        set_values(G, start, iteration)
+        if att_offspring == None:
+            offspring_list.append(0)
+        else:
+            offspring_list.append(att_offspring)
 
-# Creating a dataset where each vertex of the graph is a string
-def make_dataframe(G):
+    # Largest rank value in a graph
+    max_rank = max(ranks_list)
+
+    # Creating pandas dataframe
+    df = pd.DataFrame({'ranks': ranks_list,
+                       'vertices': vertices_list,
+                       'offspring': offspring_list})
+
+    # We assign value = 1 to all vertices of the graph that have no offspring
+    value_1_list = list(df['vertices'][df['offspring'] == 0])
+    for vertex in value_1_list:
+        attrs = {vertex: {'value': 1}}
+        nx.set_node_attributes(graph, attrs)
+
+        # For each rank, we begin to assign attributes
+    for considering_rank in range(max_rank, 0, -1):
+        # List of vertices of suitable rank
+        vert_list = list(df['vertices'][df['ranks'] == considering_rank])
+        set_values(graph, start, considering_rank, vert_list)
+
+        # Assigning the "distance" attribute to the graph vertices
+    # List of all vertexes that can be reached from the start vertex using BFS
+    vert_list = list(nx.bfs_successors(graph, source=start))
+    for component in vert_list:
+        vertex = component[0]  # The vertex where we are at this iteration
+        neighbors = component[
+            1]  # Vertices that are neighboring (which we haven't visited yet)
+
+        # If we are at the closing vertex
+        if vertex == start:
+            # Length of this segment
+            att_vertex_size = graph.nodes[vertex].get('size')
+            # Adding the value of the distance attribute
+            attrs = {vertex: {'distance': att_vertex_size}}
+            nx.set_node_attributes(graph, attrs)
+        else:
+            pass
+
+        vertex_distance = graph.nodes[vertex].get('distance')
+        # For each neighbor, we assign an attribute
+        for i in neighbors:
+            # Adding the value of the distance attribute
+            i_size = graph.nodes[i].get('size')
+            attrs = {i: {'distance': (vertex_distance + i_size)}}
+            nx.set_node_attributes(graph, attrs)
+
+
+def make_dataframe(graph):
+    """ Create dataframe (table) from graph with calculated """
     dataframe = []
-    for vertex in list(G.nodes()):
-        rank = G.nodes[vertex].get('rank')
-        value = G.nodes[vertex].get('value')
-        distance = G.nodes[vertex].get('distance')
+    for vertex in list(graph.nodes()):
+        rank = graph.nodes[vertex].get('rank')
+        value = graph.nodes[vertex].get('value')
+        distance = graph.nodes[vertex].get('distance')
         dataframe.append([vertex, rank, value, distance])
 
-    dataframe = pd.DataFrame(dataframe, columns = ['fid', 'Rank', 'Value', 'Distance'])
-    return(dataframe)
+    dataframe = pd.DataFrame(dataframe, columns=['id', 'Rank', 'Value', 'Distance'])
+    return dataframe
 
 
 def overall_call(original_file, attributes_file, start_point_id, length_path, set_progress_funk):
-    data = pd.read_csv(attributes_file)
-    list_of_adjacencies = data[['fid', 'fid_2']]
-    list_of_adjacencies = np.array(list_of_adjacencies)
-    lines = prepare(list_of_adjacencies)
-    G = nx.parse_adjlist(lines, nodetype=str)
+    """ Function which calls all above defined methods """
+
+    # Read file with attributes and interpret it as adjacency list
+    adjacency_list = load_attributes_file_as_adjacency_list(attributes_file)
+
+    lines = adjacency_list_to_desired_format(adjacency_list)
+    graph_to_parse = nx.parse_adjlist(lines, nodetype=str)
+
     l_dataframe = pd.read_csv(length_path)
     l_dataframe = l_dataframe.astype({'id': 'str'})
-    last_vertex = distance_attr(G, str(start_point_id), l_dataframe)
-    rank_set(G, str(start_point_id), str(last_vertex), set_progress_funk)
-    iter_set_values(G, str(start_point_id))
-    dataframe = make_dataframe(G)
+
+    last_vertex = distance_attr(graph_to_parse, str(start_point_id), l_dataframe)
+    rank_set(graph_to_parse, str(start_point_id), str(last_vertex), set_progress_funk)
+    iter_set_values(graph_to_parse, str(start_point_id))
+    dataframe = make_dataframe(graph_to_parse)
     rivers = pd.read_csv(original_file)
     rivers = rivers.astype({'fid': 'str'})
     data_merged = pd.merge(rivers, dataframe, on='fid')
     rows_count = data_merged.shape[0]
     df_dict = {}
     for i in range(rows_count):
-        df_dict[int(data_merged.iloc[i]['fid'])] = [int(data_merged.iloc[i]['Rank']), int(data_merged.iloc[i]['Value']), int(data_merged.iloc[i]['Distance'])]
+        df_dict[int(data_merged.iloc[i]['fid'])] = [int(data_merged.iloc[i]['Rank']),
+                                                    int(data_merged.iloc[i]['Value']),
+                                                    int(data_merged.iloc[i]['Distance'])]
     return df_dict
