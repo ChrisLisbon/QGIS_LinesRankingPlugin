@@ -29,6 +29,7 @@ from .preparation import *
 from .graph_processing import overall_call
 import processing
 
+
 class StartScript(QgsTask):
     def __init__(self, desc, flags, selectedLayer, pt, cleanTresholdValue, outLineEdit, QgsProject, fields_names):
         QgsTask.__init__(self, desc, flags)
@@ -136,7 +137,7 @@ class StartScript(QgsTask):
         if self.isCanceled():
             return False
         else:
-            self.points_file_path=os.path.join(os.getcwd(), 'pionts_temp.csv')
+            self.points_file_path = os.path.join(os.getcwd(), 'points_temp.csv')
             QgsVectorFileWriter.writeAsVectorFormat(layer=intersectPointLayer, 
                                                     fileName=self.points_file_path, 
                                                     fileEncoding="utf-8", 
@@ -145,14 +146,19 @@ class StartScript(QgsTask):
             return False
         else: 
             self.setProgress(47)
-            self.logText='Get nearest segment id'   
-            start_segment_id=get_nearest_segmentId(clipedVectorLayer, self.pt, self.setProgress)
+            self.logText = 'Get nearest segment id'
+            start_segment_id = get_nearest_segmentId(clipedVectorLayer, self.pt, self.setProgress)
         if self.isCanceled():
             return False
         else:
             self.setProgress(58)
-            self.logText='Graph traversal ranking'
-            out_dataset=overall_call(self.original_file_path, self.points_file_path, start_segment_id, self.attributes_file_path, self.setProgress)
+            self.logText = 'Graph traversal ranking'
+            out_dataset = overall_call(self.original_file_path,
+                                       self.points_file_path,
+                                       start_segment_id,
+                                       self.attributes_file_path,
+                                       self.setProgress)
+
             os.remove(self.points_file_path)
             os.remove(self.original_file_path)
             os.remove(self.attributes_file_path)

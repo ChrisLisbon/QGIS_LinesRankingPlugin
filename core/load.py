@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Union
+from typing import Union, List
 
 import numpy as np
 import pandas as pd
@@ -9,14 +9,14 @@ from core.constants import INTERMEDIATE_REPLACEMENT
 
 def load_attributes_file_as_adjacency_list(attributes_file: Union[str, Path]) -> np.ndarray:
     """ Load tabular data with columns fid, fid_2, geometry - points layer """
-    data = pd.read_csv(attributes_file)
+    data = pd.read_csv(attributes_file, dtype={'fid': str, 'fid_2': str})
     adjacency_list = data[['fid', 'fid_2']]
     adjacency_list = np.array(adjacency_list)
 
     return adjacency_list
 
 
-def adjacency_list_to_desired_format(adjacency_list: np.ndarray):
+def adjacency_list_to_desired_format(adjacency_list: Union[np.ndarray, List]):
     """ Function for bringing the adjacency list to the right format """
     lines = []
     for i in adjacency_list:
