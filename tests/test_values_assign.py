@@ -48,7 +48,7 @@ def test_values_assignment_performed_correctly():
 
     assert isinstance(dataframe, pd.DataFrame)
     assert len(dataframe) == 3336
-    assert dataframe.iloc[0]['Value'] == 744
+    assert dataframe.iloc[0]['Value Shreve'] == 744
 
 
 def test_toy_example():

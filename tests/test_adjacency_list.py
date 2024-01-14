@@ -15,8 +15,8 @@ def test_adjacency_list_loading():
 
     assert isinstance(adjacency_list, np.ndarray)
     assert len(adjacency_list) == 8728
-    assert adjacency_list[0, 0] == 1
-    assert adjacency_list[0, 1] == 819
+    assert adjacency_list[0, 0] == '1'
+    assert adjacency_list[0, 1] == '819'
 
 
 def test_adjacency_list_preparation():

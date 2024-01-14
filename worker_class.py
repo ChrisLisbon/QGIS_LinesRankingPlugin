@@ -87,16 +87,16 @@ class StartScript(QgsTask):
             return False
         else:
             self.setProgress(20)
-            self.logText='Create lines segments'
-            clipOutput=clip_line_to_segment(cleanedLayer)
-            clipedVectorLayer=clipOutput[0]
+            self.logText = 'Create lines segments'
+            clipOutput = clip_line_to_segment(cleanedLayer)
+            clipedVectorLayer = clipOutput[0]
         if self.isCanceled():
             return False
         else:
-            self.attributes_file_path=os.path.join(os.getcwd(), 'attributes_temp.csv')
-            QgsVectorFileWriter.writeAsVectorFormat(layer=clipOutput[1], 
-                                                    fileName=self.attributes_file_path, 
-                                                    fileEncoding="utf-8", 
+            self.attributes_file_path = os.path.join(os.getcwd(), 'attributes_temp.csv')
+            QgsVectorFileWriter.writeAsVectorFormat(layer=clipOutput[1],
+                                                    fileName=self.attributes_file_path,
+                                                    fileEncoding="utf-8",
                                                     driverName="CSV")
         if self.isCanceled():
             return False
@@ -125,7 +125,7 @@ class StartScript(QgsTask):
         if self.isCanceled():
             return False
         else:
-            self.original_file_path=os.path.join(os.getcwd(), 'original_temp.csv')
+            self.original_file_path = os.path.join(os.getcwd(), 'original_temp.csv')
             QgsVectorFileWriter.writeAsVectorFormat(layer=clipedVectorLayer, 
                                                     fileName=self.original_file_path, 
                                                     fileEncoding="utf-8", 

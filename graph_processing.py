@@ -72,6 +72,7 @@ def overall_call(original_file, attributes_file, start_point_id, length_path, se
     df_dict = {}
     for i in range(rows_count):
         df_dict[int(data_merged.iloc[i]['fid'])] = [int(data_merged.iloc[i]['Rank']),
-                                                    int(data_merged.iloc[i]['Value']),
+                                                    int(data_merged.iloc[i]['Value Shreve']),
+                                                    int(data_merged.iloc[i]['Value Strahler']),
                                                     int(data_merged.iloc[i]['Distance'])]
     return df_dict
