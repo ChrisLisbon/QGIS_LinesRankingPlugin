@@ -24,6 +24,7 @@ from typing import Union, List
 import numpy as np
 import pandas as pd
 import networkx as nx
+from networkx.exception import NetworkXException
 import warnings
 
 warnings.filterwarnings('ignore')
@@ -81,7 +82,13 @@ def distance_attr(graph: nx.graph, start: str, dataframe: pd.DataFrame,
         (default = None)
     """
     # List of all vertexes that can be reached from the start vertex using BFS
-    vert_list = list(nx.bfs_successors(graph, source=start))
+    try:
+        vert_list = list(nx.bfs_successors(graph, source=start))
+    except NetworkXException as ex:
+        raise ValueError(f'NetworkXException: {ex}. This is most likely because '
+                         f'the layer is torn. Please try varying the "Snapping '
+                         f'threshold" parameter')
+
     # One of the most remote vertices in the graph (this will be necessary for A*)
     last_vertex = vert_list[-1][-1][0]
 
