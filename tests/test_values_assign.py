@@ -48,7 +48,7 @@ def test_values_assignment_performed_correctly():
 
     assert isinstance(dataframe, pd.DataFrame)
     assert len(dataframe) == 3336
-    assert dataframe.iloc[0]['Value Shreve'] == 744
+    assert dataframe.iloc[0]['ValueShreve'] == 744
 
 
 def test_toy_example():
@@ -65,6 +65,6 @@ def test_toy_example():
     dataframe = make_dataframe(graph_to_parse)
 
     assert len(dataframe) == 6
-    assert dataframe.iloc[0]['Value Shreve'] == 4
-    assert dataframe.iloc[0]['Value Strahler'] == 2
+    assert dataframe.iloc[0]['ValueShreve'] == 4
+    assert dataframe.iloc[0]['ValueStrahler'] == 2
     assert dataframe.iloc[0]['Rank'] == 1

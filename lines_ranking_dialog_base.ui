@@ -222,7 +222,7 @@
           <item>
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Flow field name</string>
+             <string>Value Shreve field name</string>
             </property>
            </widget>
           </item>
@@ -232,12 +232,22 @@
           <item>
            <widget class="QLabel" name="label_12">
             <property name="text">
-             <string>Distance field name</string>
+             <string>Value Strahler field name</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_6"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Distance field name</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_7"/>
           </item>
          </layout>
         </widget>

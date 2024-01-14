@@ -34,10 +34,10 @@ warnings.filterwarnings('ignore')
 def overall_call(original_file, attributes_file, start_point_id, length_path, set_progress_funk):
     """ Function which calls all above defined methods for graph ranking task
 
-    :param original_file: example: 'D:original_temp.csv'
-    :param attributes_file: example: 'D:\Ob\points_temp.csv'
-    :param start_point_id: example: '3327'
-    :param length_path: example: 'D:\Ob\attributes_temp.csv'
+    :param original_file: example: "D:original_temp.csv"
+    :param attributes_file: example: "D:\Ob\points_temp.csv"
+    :param start_point_id: example: "3327"
+    :param length_path: example: "D:\Ob\attributes_temp.csv"
     :param set_progress_funk: function to display progress bar
     """
 
@@ -72,7 +72,7 @@ def overall_call(original_file, attributes_file, start_point_id, length_path, se
     df_dict = {}
     for i in range(rows_count):
         df_dict[int(data_merged.iloc[i]['fid'])] = [int(data_merged.iloc[i]['Rank']),
-                                                    int(data_merged.iloc[i]['Value Shreve']),
-                                                    int(data_merged.iloc[i]['Value Strahler']),
+                                                    int(data_merged.iloc[i]['ValueShreve']),
+                                                    int(data_merged.iloc[i]['ValueStrahler']),
                                                     int(data_merged.iloc[i]['Distance'])]
     return df_dict

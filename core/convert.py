@@ -17,6 +17,6 @@ def make_dataframe(graph):
 
         dataframe.append([vertex, rank, value, value_strahler, distance])
 
-    dataframe = pd.DataFrame(dataframe, columns=['id', 'Rank', 'Value Shreve',
-                                                 'Value Strahler', 'Distance'])
+    dataframe = pd.DataFrame(dataframe, columns=['fid', 'Rank', 'ValueShreve',
+                                                 'ValueStrahler', 'Distance'])
     return dataframe
