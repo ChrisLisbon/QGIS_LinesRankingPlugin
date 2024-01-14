@@ -2,10 +2,8 @@ from pathlib import Path
 import pandas as pd
 import networkx as nx
 
-from core.load import load_attributes_file_as_adjacency_list, \
-    adjacency_list_to_desired_format
-from core.main import distance_attr, rank_set
-from core.paths import get_project_path
+from graph_processing import get_project_path, load_attributes_file_as_adjacency_list, \
+    adjacency_list_to_desired_format, distance_attr, rank_set
 
 DATA_EXAMPLE = Path(get_project_path(), 'example_data', 'data_example.csv')
 DATA_LENGTH = Path(get_project_path(), 'example_data', 'data_example_length.csv')

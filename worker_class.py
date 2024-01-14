@@ -99,10 +99,13 @@ class StartScript(QgsTask):
         if self.isCanceled():
             return False
         else:
-            QgsVectorFileWriter.writeAsVectorFormat(layer=clip_output[1],
-                                                    fileName=self.attributes_file_path,
-                                                    fileEncoding="utf-8",
-                                                    driverName="CSV")
+            options = QgsVectorFileWriter.SaveVectorOptions()
+            options.driverName = "CSV"
+            options.fileEncoding = "utf-8"
+            QgsVectorFileWriter.writeAsVectorFormatV2(clip_output[1], self.attributes_file_path,
+                                                      QgsCoordinateTransformContext(),
+                                                      options)
+
         if self.isCanceled():
             return False
         else:    
@@ -130,10 +133,14 @@ class StartScript(QgsTask):
         if self.isCanceled():
             return False
         else:
-            QgsVectorFileWriter.writeAsVectorFormat(layer=clipped_vector_layer,
-                                                    fileName=self.original_file_path, 
-                                                    fileEncoding="utf-8", 
-                                                    driverName="CSV")                        
+            options = QgsVectorFileWriter.SaveVectorOptions()
+            options.driverName = "CSV"
+            options.fileEncoding = "utf-8"
+            QgsVectorFileWriter.writeAsVectorFormatV2(clipped_vector_layer,
+                                                      self.original_file_path,
+                                                      QgsCoordinateTransformContext(),
+                                                      options)
+
         if self.isCanceled():
             return False
         else:
@@ -142,10 +149,14 @@ class StartScript(QgsTask):
         if self.isCanceled():
             return False
         else:
-            QgsVectorFileWriter.writeAsVectorFormat(layer=intersect_point_layer,
-                                                    fileName=self.points_file_path, 
-                                                    fileEncoding="utf-8", 
-                                                    driverName="CSV")                   
+            options = QgsVectorFileWriter.SaveVectorOptions()
+            options.driverName = "CSV"
+            options.fileEncoding = "utf-8"
+            QgsVectorFileWriter.writeAsVectorFormatV2(intersect_point_layer,
+                                                      self.points_file_path,
+                                                      QgsCoordinateTransformContext(),
+                                                      options)
+
         if self.isCanceled():
             return False
         else: 
@@ -213,7 +224,7 @@ class StartScript(QgsTask):
                     pass
             outLayer.commitChanges()
             createSpatialIndex(outLayer)
-            outLayerWithAttr=joinAttributes(outLayer, buffer_layer, self.fields_names)            
+            outLayerWithAttr = joinAttributes(outLayer, buffer_layer, self.fields_names)
             outLayerWithAttr.setProviderEncoding(u'UTF-8')
             outLayerWithAttr.dataProvider().setEncoding(u'UTF-8')
 

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from core.constants import INTERMEDIATE_REPLACEMENT
+from graph_processing import INTERMEDIATE_REPLACEMENT
 
 
 def get_toy_adjacency_list():

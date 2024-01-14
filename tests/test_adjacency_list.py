@@ -1,10 +1,8 @@
 from pathlib import Path
 import numpy as np
 
-from core.constants import INTERMEDIATE_REPLACEMENT
-from core.load import load_attributes_file_as_adjacency_list, \
-    adjacency_list_to_desired_format
-from core.paths import get_project_path
+from graph_processing import get_project_path, load_attributes_file_as_adjacency_list, \
+    adjacency_list_to_desired_format, INTERMEDIATE_REPLACEMENT
 
 DATA_EXAMPLE = Path(get_project_path(), 'example_data', 'data_example.csv')
 

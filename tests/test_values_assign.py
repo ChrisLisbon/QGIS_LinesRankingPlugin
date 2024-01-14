@@ -1,15 +1,12 @@
 from pathlib import Path
+
 import pandas as pd
 import networkx as nx
 
-from core.constants import INTERMEDIATE_REPLACEMENT
-from core.convert import make_dataframe
-from core.load import load_attributes_file_as_adjacency_list, \
-    adjacency_list_to_desired_format
-from core.main import distance_attr, rank_set
-from core.mock import get_toy_length_table, get_toy_adjacency_list
-from core.paths import get_project_path
-from core.values import iter_set_values
+from graph_processing import get_project_path, \
+    load_attributes_file_as_adjacency_list, adjacency_list_to_desired_format, \
+    distance_attr, rank_set, iter_set_values, make_dataframe
+from mock import get_toy_adjacency_list, get_toy_length_table
 
 DATA_EXAMPLE = Path(get_project_path(), 'example_data', 'data_example.csv')
 DATA_LENGTH = Path(get_project_path(), 'example_data', 'data_example_length.csv')
