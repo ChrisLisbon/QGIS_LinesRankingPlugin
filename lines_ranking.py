@@ -24,15 +24,9 @@ from qgis.PyQt.QtGui import QIcon, QDesktopServices
 from qgis.PyQt.QtWidgets import QAction, QFileDialog, QMessageBox, QDialog, QProgressDialog, QProgressBar
 from qgis.core import QgsProject, QgsMapLayer, QgsWkbTypes, Qgis, QgsApplication, QgsFeature, QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsSpatialIndex, QgsFeatureRequest, QgsPointXY,  QgsTask
 from qgis.gui import QgsMapToolEmitPoint
-import time
 
-import processing
-from .preparation import *
-from .resources import *
 from .lines_ranking_dialog import LinesRankingDialog
 import os.path
-
-
 
 
 class LinesRanking:
@@ -56,6 +50,7 @@ class LinesRanking:
         self.actions = []
         self.menu = self.tr(u'&Lines Ranking')
         self.first_start = None
+
     def tr(self, message):
         return QCoreApplication.translate('LinesRanking', message)
 
@@ -95,7 +90,6 @@ class LinesRanking:
         return action
 
     def initGui(self):
-
         icon_path = ':/plugins/lines_ranking/icon.png'
         self.add_action(
             icon_path,
@@ -105,12 +99,9 @@ class LinesRanking:
 
         self.first_start = True
 
-
     def unload(self):
         for action in self.actions:
-            self.iface.removePluginVectorMenu(
-                self.tr(u'&Lines Ranking'),
-                action)
+            self.iface.removePluginVectorMenu(self.tr(u'&Lines Ranking'), action)
             self.iface.removeToolBarIcon(action)
 
 ######################################################################################
@@ -210,10 +201,12 @@ class LinesRanking:
             self.dlg.lineEdit_4.setDisabled(False)
             self.dlg.lineEdit_5.setDisabled(False)
             self.dlg.lineEdit_6.setDisabled(False)
+            self.dlg.lineEdit_7.setDisabled(False)
         else:
             self.dlg.lineEdit_4.setDisabled(True)
             self.dlg.lineEdit_5.setDisabled(True)
             self.dlg.lineEdit_6.setDisabled(True)
+            self.dlg.lineEdit_7.setDisabled(False)
 
     def link(self, linkStr):
         QDesktopServices.openUrl(QUrl(linkStr))
@@ -226,7 +219,7 @@ class LinesRanking:
             QMessageBox.critical(None, "Error", 'Required dependencies are not met. You should install python libraries networkx and pandas, see docs for details.')
             return None
 
-        if self.first_start == True:
+        if self.first_start is True:
             self.first_start = False            
             self.dlg = LinesRankingDialog(self.iface.mainWindow())
             self.dlg.lineEdit.setPlaceholderText("[Save to temporary layer]")
@@ -247,6 +240,7 @@ class LinesRanking:
             self.dlg.lineEdit_4.setDisabled(True)
             self.dlg.lineEdit_5.setDisabled(True)
             self.dlg.lineEdit_6.setDisabled(True)
+            self.dlg.lineEdit_7.setDisabled(True)
             
         layers = QgsProject.instance().layerTreeRoot().children()
         self.filtered_layers=[]
@@ -299,18 +293,22 @@ class LinesRanking:
         if selectedLayer!=None:
             selectedLayer.setProviderEncoding(u'UTF-8')
             selectedLayer.dataProvider().setEncoding(u'UTF-8')
-            pt=self.get_point_coordinates()
+            pt = self.get_point_coordinates()
             if self.dlg.checkBox.isChecked():
-                fields_names=[]
+                fields_names = []
                 fields_names.append(self.dlg.lineEdit_4.text().replace(' ', ''))
                 fields_names.append(self.dlg.lineEdit_5.text().replace(' ', ''))
                 fields_names.append(self.dlg.lineEdit_6.text().replace(' ', ''))
+                fields_names.append(self.dlg.lineEdit_7.text().replace(' ', ''))
             else:
-                fields_names=['Rank', 'Value', 'Distance']
-            if fields_names[0]!= '' and fields_names[1]!= '' and fields_names[2]!= '':
-                if pt!=None:
+                fields_names = ['Rank', 'ValueShreve', 'ValueStrahler', 'Distance']
+            if fields_names[0] != '' and fields_names[1] != '' and fields_names[2] != '':
+                if pt is not None:
                     ### QgsTask class call ### 
-                    self.m = self.Worker(QgsApplication, selectedLayer, pt, cleanTresholdValue, outLineEdit, QgsProject, prBar, logTxtLine, fields_names)
+                    self.m = self.Worker(QgsApplication, selectedLayer, pt,
+                                         cleanTresholdValue, outLineEdit,
+                                         QgsProject, prBar, logTxtLine,
+                                         fields_names)
                     self.m.StartScriptTask()            
 
                 

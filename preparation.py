@@ -23,6 +23,7 @@ from qgis.PyQt.QtCore import QVariant
 from qgis.core import QgsEllipsoidUtils, QgsProject, QgsMapLayer, QgsWkbTypes, Qgis, QgsApplication, QgsFeature, QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsSpatialIndex, QgsFeatureRequest, QgsPointXY, QgsDistanceArea, QgsUnitTypes
 import processing
 
+
 def fix_geometries(layer):
     algorithmOutput = processing.run(
         'native:fixgeometries',
@@ -33,6 +34,7 @@ def fix_geometries(layer):
     )
     fixedVectorLayer=algorithmOutput["OUTPUT"]
     return fixedVectorLayer
+
 
 def clip_line_to_segment(layer):
     algorithmOutput = processing.run(
@@ -77,25 +79,27 @@ def clip_line_to_segment(layer):
     attrClipedVectorLayer.commitChanges()
     return [clipedVectorLayer, attrClipedVectorLayer]
 
+
 def clean_gaps(layer, treshold):
     algorithmOutput = processing.run(
             "grass7:v.clean",
-            { '-b' : False,
-              '-c' : False, 
-              'GRASS_MIN_AREA_PARAMETER' : 0.0001, 
-              'GRASS_OUTPUT_TYPE_PARAMETER' : 0, 
-              'GRASS_REGION_PARAMETER' : None, 
-              'GRASS_SNAP_TOLERANCE_PARAMETER' : -1, 
-              'GRASS_VECTOR_DSCO' : '', 
-              'GRASS_VECTOR_EXPORT_NOCAT' : False, 
-              'GRASS_VECTOR_LCO' : '', 
-              'error' : 'memory:', 
-              'input' : layer, 
-              'output' : 'TEMPORARY_OUTPUT', 
-              'threshold' : treshold, 
-              'tool' : [1], 
-              'type' : [1] })
+            { '-b': False,
+              '-c': False,
+              'GRASS_MIN_AREA_PARAMETER': 0.0001,
+              'GRASS_OUTPUT_TYPE_PARAMETER': 0,
+              'GRASS_REGION_PARAMETER': None,
+              'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
+              'GRASS_VECTOR_DSCO': '',
+              'GRASS_VECTOR_EXPORT_NOCAT': False,
+              'GRASS_VECTOR_LCO': '',
+              'error': 'memory:',
+              'input': layer,
+              'output': 'TEMPORARY_OUTPUT',
+              'threshold': treshold,
+              'tool': [1],
+              'type': [1]})
     return algorithmOutput['output']
+
 
 def get_lines_intersections(layer, set_progress_funk):
     algorithmOutput = processing.run(
@@ -122,6 +126,7 @@ def get_lines_intersections(layer, set_progress_funk):
     intersectPointLayer.commitChanges()
     return intersectPointLayer
 
+
 def get_nearest_segmentId(layer, QgsPointXY, set_progress_funk):
     spIndex = QgsSpatialIndex()
     all_f=layer.featureCount()
@@ -135,6 +140,7 @@ def get_nearest_segmentId(layer, QgsPointXY, set_progress_funk):
     nearest_feature.nextFeature(ftr)
     return ftr["fid"]
 
+
 def createSpatialIndex(layer):
     processing.run(
         'qgis:createspatialindex',
@@ -142,6 +148,7 @@ def createSpatialIndex(layer):
             "INPUT": layer
         }
     )
+
 
 def createCleanedBuffer(layer):
     algorithmOutput = processing.run(
@@ -159,6 +166,7 @@ def createCleanedBuffer(layer):
     )
     buffer_layer=algorithmOutput["OUTPUT"]
     return buffer_layer
+
 
 def joinAttributes(outlayer, reallayer, user_fields_names):
     prov = reallayer.dataProvider()
