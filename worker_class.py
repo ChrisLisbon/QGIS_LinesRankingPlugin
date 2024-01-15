@@ -201,20 +201,25 @@ class StartScript(QgsTask):
                         break
                         return False
                     else:
-                        f_id=feature['fid']                   
-                        rank=out_dataset[f_id][0]
-                        value=out_dataset[f_id][1]
-                        distance=out_dataset[f_id][2]
+                        f_id = feature['fid']
+                        rank = out_dataset[f_id][0]
+                        value_shreve = out_dataset[f_id][1]
+                        value_strahler = out_dataset[f_id][2]
+                        distance = out_dataset[f_id][3]
                         try:
-                            feature[self.fields_names[0]]=rank
+                            feature[self.fields_names[0]] = rank
                         except Exception:
                             pass
                         try:
-                            feature[self.fields_names[1]]=value
+                            feature[self.fields_names[1]] = value_shreve
                         except Exception:
                             pass
                         try:
-                            feature[self.fields_names[2]]=distance
+                            feature[self.fields_names[2]] = value_strahler
+                        except Exception:
+                            pass
+                        try:
+                            feature[self.fields_names[3]] = distance
                         except Exception:
                             pass
 
@@ -232,8 +237,8 @@ class StartScript(QgsTask):
             return False
         else:
             if self.outLineEdit.replace(' ', '')!='':
-                if self.outLineEdit[-5:]!='.gpkg':
-                    self.outLineEdit=self.outLineEdit+'.gpkg'
+                if self.outLineEdit[-5:] != '.gpkg':
+                    self.outLineEdit = self.outLineEdit + '.gpkg'
                 try:
                     QgsVectorFileWriter.writeAsVectorFormat(layer=outLayerWithAttr,
                                                             fileName=self.outLineEdit,
@@ -262,7 +267,7 @@ class StartScript(QgsTask):
                 os.remove(self.attributes_file_path)
             except Exception:
                 pass
-            if self.error_reason=='grass':
+            if self.error_reason == 'grass':
                 QMessageBox.critical(None, "Error", 'GRASS modules are not available. Activate GRASS or leave snapping threshold empty')
         if result is True:
             QMessageBox.information(None, "Success", 'Lines Ranking process is finished')
