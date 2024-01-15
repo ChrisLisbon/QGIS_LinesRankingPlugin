@@ -13,7 +13,7 @@ Our lab were specialized in spatial analysis using contemporary technologies suc
 machine learning, backend and fronted tools for spatial services and scientific 
 approach to finish our projects.
 
-At the moment (summer 2023) we are no longer working together (nevertheless, 
+At the moment (winter 2024) we are no longer working together (nevertheless, 
 we still write code or/and scientific papers), but in the summer of 
 2020 our team consisted of three people:
 

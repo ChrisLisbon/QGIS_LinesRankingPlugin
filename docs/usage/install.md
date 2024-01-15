@@ -13,13 +13,13 @@ Then choose `Not installed` and write `Lines Ranking` into the search field:
 
 Then click Install plugin button. Congratulations, you just have installed a plugin!
 
-Chek toolbar for icon <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/icon.png" width="15"/>
+Check toolbar for icon <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/icon.png" width="15"/>
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/installed_icon.png" width="750"/>
 
 ## Additional steps (for QGIS versions lower than 3.16)
 
-For older versions of QGIS you will need to install the Python libraries: networkx, pandas
+For older versions of QGIS you will need to install the Python libraries: `networkx`, `pandas`
 
 ### Linux
 

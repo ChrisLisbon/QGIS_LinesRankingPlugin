@@ -7,7 +7,7 @@ Here is information on how you can use the plugin to analyze the river network a
 
 - QGIS Desktop 3.30.2
 - Windows
-- Date: 28.05.2023
+- Date: 15.01.2024
 - Data: The Ob river as vector layer
 
 We will use the Ob river data to perform analysis. Load data and assign projection `WGS 84 / UTM zone 40N`:
@@ -26,10 +26,18 @@ Choose start point and launch the algorithm:
 
 ## Shreve stream order
 
-Visualize "Rank" column and prepare a map
+Visualize "ValueShreve" column and prepare a map
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/shreve_order_ob.png" width="750"/>
 
 ## Strahler stream order
 
-In progress 
+Visualize "ValueStrahler" column and prepare a map
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/strahler_order_ob.png" width="750"/>
+
+## Topological stream order 
+
+Visualize "Rank" column and prepare a map
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/topological_order_ob.png" width="750"/>
