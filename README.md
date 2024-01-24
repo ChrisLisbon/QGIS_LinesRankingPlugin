@@ -28,4 +28,4 @@ Feel free to contact us:
 
 Julia Borisova | yulashka.htm@yandex.ru
 
-Mikhail Sarafanov | mik_sar@mail.ru
+Mikhail Sarafanov | mik.sarafanov@gmail.com
