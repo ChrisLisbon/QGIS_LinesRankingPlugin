@@ -243,21 +243,25 @@ class LinesRanking:
             self.dlg.lineEdit_7.setDisabled(True)
             
         layers = QgsProject.instance().layerTreeRoot().children()
-        self.filtered_layers=[]
-        self.point_layers=[]
+        self.filtered_layers = []
+        self.point_layers = []
         for layer in layers:
-            if layer.layer().type()==QgsMapLayer.VectorLayer:
-                valid_line=False
-                valid_point=False
-                for feature in layer.layer().getFeatures():
-                    if feature.geometry().wkbType()==QgsWkbTypes.LineString or feature.geometry().wkbType()==QgsWkbTypes.MultiLineString or feature.geometry().wkbType()==QgsWkbTypes.Unknown:
-                        valid_line=True
-                    if feature.geometry().wkbType()==QgsWkbTypes.Point or feature.geometry().wkbType()==QgsWkbTypes.MultiPoint:
-                        valid_point=True
-                if valid_line==True:
-                    self.filtered_layers.append(layer)
-                if valid_point==True:
-                    self.point_layers.append(layer)
+            try:
+                if layer.layer().type() == QgsMapLayer.VectorLayer:
+                    valid_line = False
+                    valid_point = False
+                    for feature in layer.layer().getFeatures():
+                        if feature.geometry().wkbType()==QgsWkbTypes.LineString or feature.geometry().wkbType()==QgsWkbTypes.MultiLineString or feature.geometry().wkbType()==QgsWkbTypes.Unknown:
+                            valid_line = True
+                        if feature.geometry().wkbType()==QgsWkbTypes.Point or feature.geometry().wkbType()==QgsWkbTypes.MultiPoint:
+                            valid_point = True
+                    if valid_line is True:
+                        self.filtered_layers.append(layer)
+                    if valid_point is True:
+                        self.point_layers.append(layer)
+            except Exception as ex:
+                # Mostly due to AttributeError: 'QgsLayerTreeNode' object has no attribute 'layer'
+                pass
                     
         self.dlg.comboBox.clear()
         self.dlg.comboBox_2.clear()
