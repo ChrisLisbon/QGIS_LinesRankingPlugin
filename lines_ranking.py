@@ -90,7 +90,7 @@ class LinesRanking:
         return action
 
     def initGui(self):
-        icon_path = ':/plugins/lines_ranking/icon.png'
+        icon_path = f'{self.plugin_dir}/icon.png'
         self.add_action(
             icon_path,
             text=self.tr(u'Lines Ranking'),
