@@ -5,17 +5,17 @@ and guide: [https://qgis.org/en/site/forusers/download.html](https://qgis.org/en
 
 Then there is a need to install a plugin. Go to `Plugins` - `Manage and Install Plugins`
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/manage_plugins.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/manage_plugins.png" width="750"/>
 
 Then choose `Not installed` and write `Lines Ranking` into the search field:
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/install_plugin.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/install_plugin.png" width="750"/>
 
 Then click Install plugin button. Congratulations, you just have installed a plugin!
 
 Check toolbar for icon <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/icon.png" width="15"/>
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/installed_icon.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/installed_icon.png" width="750"/>
 
 ## Additional steps (for QGIS versions lower than 3.16)
 

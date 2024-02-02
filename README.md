@@ -4,17 +4,15 @@
 
 # Lines ranking (QGIS)
 
-QGIS plugin for ranking lines features based on the position of starting point
+QGIS plugin for ranking linear vector objects 
+
+[Official plugin page](https://plugins.qgis.org/plugins/lines_ranking/#plugin-about) (feel free to rate ⭐⭐⭐⭐⭐)
 
 ## Brief description
 
-The plugin calculates the rank of each segment of the connected river 
-network, and the number of tributaries flowing into the segment.
-
-The algorithm is based on constructing a mathematical representation of 
-the network in the form of a graph, taking into account the segment length. 
-The output can be used for cartographic visualizations and network explorations.
-
+The plugin is designed for ranking segments of linear vector objects using starting point.
+Can be used for calculations in hydrology (e.g. **Strahler**, **Shreve** and **Topological** stream order) and related geo-sciences.
+  
 ## Documentation 
 
 The Lines Ranking plugin can be used for road network analysis and stream ordering (for example, for calculating Shreve stream order).

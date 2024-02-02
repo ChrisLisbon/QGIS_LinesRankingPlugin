@@ -17,27 +17,27 @@ We will use the Ob river data to perform analysis. Load data and assign projecti
 
 And obtain the following initial picture:
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/ob_init.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ob_init.png" width="750"/>
 
 Choose start point and launch the algorithm: 
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/ob_value.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ob_value.png" width="750"/>
 
 
 ## Shreve stream order
 
 Visualize "ValueShreve" column and prepare a map
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/shreve_order_ob.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/shreve_order_ob.png" width="750"/>
 
 ## Strahler stream order
 
 Visualize "ValueStrahler" column and prepare a map
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/strahler_order_ob.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/strahler_order_ob.png" width="750"/>
 
 ## Topological stream order 
 
 Visualize "Rank" column and prepare a map
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/topological_order_ob.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/topological_order_ob.png" width="750"/>

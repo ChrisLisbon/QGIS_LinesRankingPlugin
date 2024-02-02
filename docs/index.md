@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/ranking.png" width="650"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ranking.png" width="650"/>
 
 Welcome to [QGIS Lines Ranking plugin](https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin) documentation!
 
@@ -7,7 +7,7 @@ Welcome to [QGIS Lines Ranking plugin](https://github.com/ChrisLisbon/QGIS_Lines
 The plugin can be used to rank any linear vector layers. 
 One of the most common cases in which it can be used is river network analysis (mainly - **stream ordering**):
 
-<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/application.png" width="750"/>
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/application.png" width="750"/>
 
 As can be seen from the image above, in the process of the plugin's execution the attributes are assigned to elements of 
 the vector layer of the river network (and then based on the values of these attributes are visualized). 
