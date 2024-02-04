@@ -4,6 +4,8 @@
 
 QGIS plugin for ranking linear vector objects 
 
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ob_value.png" width="650"/>
+
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/topological_order_ob.png" width="650"/>
 
 [Official plugin page](https://plugins.qgis.org/plugins/lines_ranking/#plugin-about) (feel free to rate ⭐⭐⭐⭐⭐)
