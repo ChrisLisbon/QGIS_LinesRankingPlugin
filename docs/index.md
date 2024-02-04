@@ -13,7 +13,8 @@ As can be seen from the image above, in the process of the plugin's execution th
 the vector layer of the river network (and then based on the values of these attributes are visualized). 
 
 With this plugin it is possible to analyze any linear vector objects, 
-the structure of which is similar to a river net. For example, roads network, railroad system or any other logistic.
+the structure of which is similar to a river net. For example, roads network, railroad system or 
+any other logistic.
 
 ## Documentation structure 
 

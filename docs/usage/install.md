@@ -18,7 +18,7 @@ Check toolbar for icon <img src="https://raw.githubusercontent.com/ChrisLisbon/Q
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/installed_icon.png" width="750"/>
 
 ## Additional steps (for QGIS versions lower than 3.16)
-
+ 
 For older versions of QGIS you will need to install the Python libraries: `networkx`, `pandas`
 
 ### Linux
@@ -42,4 +42,3 @@ Open OSGeo4W Shell and run commands:
 ```pip install pandas```
 
 ```pip install networkx```
-
