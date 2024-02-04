@@ -2,8 +2,6 @@
 
 [![Documentation Status](https://readthedocs.org/projects/linesranking/badge/?version=latest)](https://linesranking.readthedocs.io/en/latest/?badge=latest)
 
-# Lines ranking (QGIS)
-
 QGIS plugin for ranking linear vector objects 
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/topological_order_ob.png" width="650"/>
