@@ -251,9 +251,9 @@ class LinesRanking:
                     valid_line = False
                     valid_point = False
                     for feature in layer.layer().getFeatures():
-                        if feature.geometry().wkbType()==QgsWkbTypes.LineString or feature.geometry().wkbType()==QgsWkbTypes.MultiLineString or feature.geometry().wkbType()==QgsWkbTypes.Unknown:
+                        if feature.geometry().wkbType() == QgsWkbTypes.LineString or feature.geometry().wkbType() == QgsWkbTypes.MultiLineString or feature.geometry().wkbType() == QgsWkbTypes.Unknown:
                             valid_line = True
-                        if feature.geometry().wkbType()==QgsWkbTypes.Point or feature.geometry().wkbType()==QgsWkbTypes.MultiPoint:
+                        if feature.geometry().wkbType() == QgsWkbTypes.Point or feature.geometry().wkbType() == QgsWkbTypes.MultiPoint:
                             valid_point = True
                     if valid_line is True:
                         self.filtered_layers.append(layer)
@@ -261,7 +261,24 @@ class LinesRanking:
                         self.point_layers.append(layer)
             except Exception as ex:
                 # Mostly due to AttributeError: 'QgsLayerTreeNode' object has no attribute 'layer'
-                pass
+                try:
+                    layers = layer.checkedLayers()
+                    if layers is not None and len(layers) >= 1:
+                        layer = layers[0]
+                        if layer.type() == QgsMapLayer.VectorLayer:
+                            valid_line = False
+                            valid_point = False
+                            for feature in layer.getFeatures():
+                                if feature.geometry().wkbType() == QgsWkbTypes.LineString or feature.geometry().wkbType() == QgsWkbTypes.MultiLineString or feature.geometry().wkbType() == QgsWkbTypes.Unknown:
+                                    valid_line = True
+                                if feature.geometry().wkbType() == QgsWkbTypes.Point or feature.geometry().wkbType() == QgsWkbTypes.MultiPoint:
+                                    valid_point = True
+                            if valid_line is True:
+                                self.filtered_layers.append(layer)
+                            if valid_point is True:
+                                self.point_layers.append(layer)
+                except Exception as ex:
+                    pass
                     
         self.dlg.comboBox.clear()
         self.dlg.comboBox_2.clear()
@@ -290,10 +307,13 @@ class LinesRanking:
         outLineEdit=self.dlg.lineEdit.text()
         prBar=self.dlg.progressBar
         logTxtLine=self.dlg.label_9
-        if selectedLayerIndex<=len(self.filtered_layers)-1:
-            selectedLayer = self.filtered_layers[selectedLayerIndex].layer()
-        if selectedLayerIndex>len(self.filtered_layers)-1: 
-            selectedLayer =  QgsVectorLayer(self.dlg.comboBox.currentText(), self.dlg.comboBox.currentText().split('/')[-1].split('.')[0], "ogr")        
+        if selectedLayerIndex <= len(self.filtered_layers) - 1:
+            try:
+                selectedLayer = self.filtered_layers[selectedLayerIndex].layer()
+            except Exception as ex:
+                selectedLayer = self.filtered_layers[selectedLayerIndex]
+        if selectedLayerIndex>len(self.filtered_layers) - 1:
+            selectedLayer = QgsVectorLayer(self.dlg.comboBox.currentText(), self.dlg.comboBox.currentText().split('/')[-1].split('.')[0], "ogr")
         if selectedLayer!=None:
             selectedLayer.setProviderEncoding(u'UTF-8')
             selectedLayer.dataProvider().setEncoding(u'UTF-8')
