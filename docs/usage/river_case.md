@@ -5,9 +5,9 @@ Here is information on how you can use the plugin to analyze the river network a
 
 ## Experiment setup 
 
-- QGIS Desktop 3.30.2
+- QGIS Desktop 3.34.3
 - Windows
-- Date: 15.01.2024
+- Date: 04.02.2024
 - Data: The Ob river as vector layer
 
 We will use the Ob river data to perform analysis. Load data and assign projection `WGS 84 / UTM zone 40N`:
