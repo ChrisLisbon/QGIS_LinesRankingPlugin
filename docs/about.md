@@ -23,8 +23,10 @@ we still write code or/and scientific papers), but in the summer of
 
 If you want to contact us, use the artifacts below: 
 
-| Person            |        e-mail           |
-|-------------------|-------------------------|
-| Eduard Kazakov    | ee.kazakov@gmail.com    |
-| Julia Borisova    | yulashka.htm@yandex.ru  |
-| Mikhail Sarafanov | mik.sarafanov@gmail.com |
+| Person                                              |        e-mail           |
+|-----------------------------------------------------|-------------------------|
+| [Eduard Kazakov](https://github.com/eduard-kazakov) | ee.kazakov@gmail.com    |
+| [Julia Borisova](https://github.com/ChrisLisbon)    | yulashka.htm@yandex.ru  |
+| [Mikhail Sarafanov](https://github.com/Dreamlone)   | mik.sarafanov@gmail.com |
+
+Please use the plugin and feel free to message us :) 

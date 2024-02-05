@@ -12,9 +12,7 @@ nav:
           - 'Railways use case': 'usage/rails_case.md'
     - Theoretical issues:
           - 'Vector data': 'theoretical/vector_data.md'
-          - 'Preprocessing': 'theoretical/preprocessing.md'
-          - 'Graphs': 'theoretical/graphs.md'
-          - 'Ranking': 'theoretical/algorithm.md'
+          - 'Brief description': 'theoretical/algorithm.md'
     - 'About us':
           - 'Some info': 'about.md'
 theme:
