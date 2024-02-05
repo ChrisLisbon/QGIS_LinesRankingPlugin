@@ -4,6 +4,11 @@ So, we have already installed the plugin in QGIS.
 It's the time to look at its functionality. 
 In this document, we'll take a step-by-step look at how it can be used. 
 
+## Important tip!
+
+Before starting to use the algorithm, please make sure that the project uses metric projection. 
+Also the layers used in the calculation (both linear and point layers) should be converted to this projection.
+
 ## Data 
 
 In the [repository with source code](https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin)
@@ -30,7 +35,8 @@ where the river flows into the ocean. Then the following results obtained:
 ## Usage example (Select layer) 
 
 You can also use a one-point vector layer to assign the starting point run the algorithm.
-We can use `start_point_example`. Re-project the layer: `Processing` - `Toolbox` - `Reproject layer` - assign "WGS 84 / UTM zone 49N".
+We can use `start_point_example`. Re-project this point layer: `Processing` - `Toolbox` - 
+`Reproject layer` - assign "WGS 84 / UTM zone 49N". Save result into file `start_point_example_reprojected`.
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/start_point_layer.png" width="750"/>
 
@@ -76,7 +82,7 @@ To better understand what values have been assigned to this layer, we suggest pr
 
 **Shreve order** 
 
-`rank_attributes_th_25` - `Properties` - `Symbology` - `Graduated`. Then choose `ValueShreve` field for Value
+`rank_attributes` - `Properties` - `Symbology` - `Graduated`. Then choose `ValueShreve` field for Value
 and 'Size' for Method and click Classify: 
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/result_shreve.png" width="750"/>
@@ -87,7 +93,7 @@ Thus, using the Value attribute you can show the total number of tributaries.
 
 **Strahler order** 
 
-`rank_attributes_th_25` - `Properties` - `Symbology` - `Graduated`. Then choose 'ValueStrahler' field for Value
+`rank_attributes` - `Properties` - `Symbology` - `Graduated`. Then choose 'ValueStrahler' field for Value
 and 'Color' for Method and click Classify: 
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/result_strahler.png" width="750"/>

@@ -3,6 +3,11 @@
 Welcome to the "River use case" page.
 Here is information on how you can use the plugin to analyze the river network and prepare visualizations.
 
+## Important tip!
+
+Before starting to use the algorithm, please make sure that the project uses metric projection. 
+Also the layers used in the calculation (both linear and point layers) should be converted to this projection.
+
 ## Experiment setup 
 
 - QGIS Desktop 3.34.3

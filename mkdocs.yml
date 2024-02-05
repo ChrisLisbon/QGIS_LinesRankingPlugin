@@ -15,7 +15,8 @@ nav:
           - 'Preprocessing': 'theoretical/preprocessing.md'
           - 'Graphs': 'theoretical/graphs.md'
           - 'Ranking': 'theoretical/algorithm.md'
-    - 'About us': 'about.md'
+    - 'About us':
+          - 'Some info': 'about.md'
 theme:
     name: readthedocs
     logo: https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/docs/images/logo_simple.png

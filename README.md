@@ -22,6 +22,10 @@ Usage examples and detailed description of the algorithm can be found in the doc
 
 The official plugin documentation can be reached via [link](https://linesranking.readthedocs.io/en/latest/)
 
+## Installation guide 
+
+Please follow the instructions from the [installation page](https://linesranking.readthedocs.io/en/latest/usage/install/). 
+
 ## Install from zip archive 
 
 QGIS has the ability to install plugins from zip archives. 
