@@ -26,11 +26,31 @@ turn on Open Street Map: `Web` - `QuickWebServices` - `OSM` - `OSM Standard`. An
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/rails_init.png" width="750"/>
 
 In front of you is the railroad network of Finland. Let's try to look at this 
-network as a river network. Indeed, there are many similarities: Finland's largest city, 
+network as a "river network". Indeed, there are many similarities: Finland's largest city, 
 Helsinki, is located in the south of the country. The rail network converges to 
 the capital in one way or another, as Helsinki is crucial logistics hub.
 
-Thus, choose start point (Helsinki) and launch the algorithm: 
+Thus, choose start point (Helsinki) and launch the algorithm - Shreve value are shown via line size: : 
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/rails_value.png" width="750"/>
 
+The algorithm will assign four parameters to each river segment: `ValueShreve`, `ValueStrahler`, `Rank`, `Distance`
+After that, visualizations can be prepared via `rank_attributes` - `Properties` - `Symbology` - `Graduated`. 
+
+## Shreve stream order
+
+Visualize "ValueShreve" column and prepare a map
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/shreve_order_rails.png" width="750"/>
+
+## Strahler stream order
+
+Visualize "ValueStrahler" column and prepare a map
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/strahler_order_rails.png" width="750"/>
+
+## Topological stream order 
+
+Visualize "Rank" column and prepare a map
+
+<img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/topological_order_rails.png" width="750"/>

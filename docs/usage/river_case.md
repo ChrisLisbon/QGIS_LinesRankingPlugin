@@ -24,7 +24,7 @@ turn on Open Street Map: `Web` - `QuickWebServices` - `OSM` - `OSM Standard`. An
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ob_init.png" width="750"/>
 
-Choose start point (Gulf of Ob) and launch the algorithm: 
+Choose start point (Gulf of Ob) and launch the algorithm - Shreve value are shown via line size: 
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ob_value.png" width="750"/>
 
