@@ -1,7 +1,7 @@
 # River network analysis use case
 
 Welcome to the "River use case" page.
-Here is information on how you can use the plugin to analyze the river network and prepare visualizations.
+Here is information on how you can use the plugin to analyze the Ob river network and which visualizations can prepare.
 
 ## Important tip!
 
@@ -13,21 +13,23 @@ Also the layers used in the calculation (both linear and point layers) should be
 - QGIS Desktop 3.34.3
 - Windows
 - Date: 04.02.2024
-- Data: The Ob river as vector layer
+- Data: The Ob river as vector layer - see [Ob_river layer in the repository](https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin/tree/master/example_data)
 
-We will use the Ob river data to perform analysis. Load data and assign projection `WGS 84 / UTM zone 40N`:
+Load vector data and assign projection `WGS 84 / UTM zone 40N`:
 
 - Project: `Project` - `Properties` - `CRS` - `WGS 84 / UTM zone 40N`;
 - Layer: `Processing` - `Toolbox` - `Reproject layer` - assign "WGS 84 / UTM zone 40N"
 
-And obtain the following initial picture:
+turn on Open Street Map: `Web` - `QuickWebServices` - `OSM` - `OSM Standard`. And obtain the following initial picture:
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ob_init.png" width="750"/>
 
-Choose start point and launch the algorithm: 
+Choose start point (Gulf of Ob) and launch the algorithm: 
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/ob_value.png" width="750"/>
 
+The algorithm will assign four parameters to each river segment: `ValueShreve`, `ValueStrahler`, `Rank`, `Distance`
+After that, visualizations can be prepared via `rank_attributes` - `Properties` - `Symbology` - `Graduated`. 
 
 ## Shreve stream order
 

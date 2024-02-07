@@ -15,7 +15,7 @@ In the [repository with source code](https://github.com/ChrisLisbon/QGIS_LinesRa
 there is a folder with data examples (you can download this files to your computer by clicking "Download raw file"). 
 We will take 'river_example' vector layer from [example_data](https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin/tree/master/example_data) folder.
 
-Load this file into QGIS (and turn on Open Street Map: `Web` - `QuickWebServices` - `OSM` - `OSM Standard`.
+Load this file into QGIS (and turn on Open Street Map: `Web` - `QuickWebServices` - `OSM` - `OSM Standard`).
 
 Perform re-projection to WGS 84 / UTM zone 49N: 
 
