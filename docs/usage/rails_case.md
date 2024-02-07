@@ -30,7 +30,7 @@ network as a "river network". Indeed, there are many similarities: Finland's lar
 Helsinki, is located in the south of the country. The rail network converges to 
 the capital in one way or another, as Helsinki is crucial logistics hub.
 
-Thus, choose start point (Helsinki) and launch the algorithm - Shreve value are shown via line size: : 
+Thus, choose start point (Helsinki) and launch the algorithm - Shreve value are shown via line size: 
 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/rails_value.png" width="750"/>
 
