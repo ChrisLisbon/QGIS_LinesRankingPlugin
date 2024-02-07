@@ -35,7 +35,7 @@ Thus, choose start point (Helsinki) and launch the algorithm - Shreve value are 
 <img src="https://raw.githubusercontent.com/ChrisLisbon/QGIS_LinesRankingPlugin/master/images/rails_value.png" width="750"/>
 
 The algorithm will assign four parameters to each river segment: `ValueShreve`, `ValueStrahler`, `Rank`, `Distance`
-After that, visualizations can be prepared via `rank_attributes` - `Properties` - `Symbology` - `Graduated`. 
+After that, visualizations can be prepared via `fin_rails_ranked` - `Properties` - `Symbology` - `Graduated`. 
 
 ## Shreve stream order
 
