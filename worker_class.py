@@ -275,23 +275,27 @@ class StartScript(QgsTask):
 
 class Worker(QObject):
     def __init__(self, qapp, selectedLayer, pt, cleanTresholdValue, outLineEdit, QgsProject, prBar, logTxtLine, fields_names):
-        self.qapp=qapp
-        self.selectedLayer=selectedLayer
-        self.pt=pt
-        self.cleanTresholdValue=cleanTresholdValue
-        self.outLineEdit=outLineEdit
-        self.QgsProject=QgsProject
-        self.result=None
-        self.progress=prBar
-        self.logTxtLine=logTxtLine
-        self.fields_names=fields_names
+        self.qapp = qapp
+        self.selectedLayer = selectedLayer
+        self.pt = pt
+        self.cleanTresholdValue = cleanTresholdValue
+        self.outLineEdit = outLineEdit
+        self.QgsProject = QgsProject
+        self.result = None
+        self.progress = prBar
+        self.logTxtLine = logTxtLine
+        self.fields_names = fields_names
 
     def setResult(self, r):
         QgsProject.instance().addMapLayer(r)
-        self.progress=0
+        self.progress = 0
     
     def progressSet(self, progress, logText):
         self.logTxtLine.setText(logText)
+        if isinstance(progress, float):
+            # Current value must be integer
+            progress = int(round(progress))
+
         self.progress.setValue(progress)
 
     def StartScriptTask(self):        
