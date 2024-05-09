@@ -24,12 +24,12 @@ from qgis.core import QgsEllipsoidUtils, QgsProject, QgsMapLayer, QgsWkbTypes, Q
 import processing
 
 
-def fix_geometries(layer):
+def fix_geometries(layer, output):
     algorithmOutput = processing.run(
         'native:fixgeometries',
         {
             "INPUT": layer,
-            "OUTPUT": 'memory:fixed_geometry'
+            "OUTPUT": output
         }
     )
     fixedVectorLayer=algorithmOutput["OUTPUT"]
@@ -41,28 +41,28 @@ def clip_line_to_segment(layer):
         'qgis:splitwithlines',
         {
             "INPUT": layer,
-            "LINES":layer,
+            "LINES": layer,
             "OUTPUT": 'memory:split_no_attr'
         }
     )
-    clipedVectorLayer=algorithmOutput["OUTPUT"]
+    clipedVectorLayer = algorithmOutput["OUTPUT"]
     
     #Setting id field for split layer
-    algorithmOutput=processing.run(
+    algorithmOutput = processing.run(
         'qgis:fieldcalculator',
         {
             'INPUT': clipedVectorLayer,
             'FIELD_NAME': 'id',
-            'FIELD_TYPE':1,
-            'FIELD_LENGTH':7,
-            'FIELD_PRECISION':1,
-            'NEW_FIELD':True,
-            'FORMULA':'$id',
+            'FIELD_TYPE': 1,
+            'FIELD_LENGTH': 7,
+            'FIELD_PRECISION': 1,
+            'NEW_FIELD': True,
+            'FORMULA': '$id',
             'OUTPUT': 'memory:with_id_attr'
         }
     )
-    with_id_attr_layer=algorithmOutput["OUTPUT"]
-    algorithmOutput=processing.run(
+    with_id_attr_layer = algorithmOutput["OUTPUT"]
+    algorithmOutput = processing.run(
         'qgis:fieldcalculator',
         {
             'INPUT': with_id_attr_layer,
@@ -80,24 +80,24 @@ def clip_line_to_segment(layer):
     return [clipedVectorLayer, attrClipedVectorLayer]
 
 
-def clean_gaps(layer, treshold):
+def clean_gaps(layer, threshold, output):
     algorithmOutput = processing.run(
             "grass7:v.clean",
-            { '-b': False,
-              '-c': False,
-              'GRASS_MIN_AREA_PARAMETER': 0.0001,
-              'GRASS_OUTPUT_TYPE_PARAMETER': 0,
-              'GRASS_REGION_PARAMETER': None,
-              'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
-              'GRASS_VECTOR_DSCO': '',
-              'GRASS_VECTOR_EXPORT_NOCAT': False,
-              'GRASS_VECTOR_LCO': '',
-              'error': 'memory:',
-              'input': layer,
-              'output': 'TEMPORARY_OUTPUT',
-              'threshold': treshold,
-              'tool': [1],
-              'type': [1]})
+            {'-b': False,
+             '-c': False,
+             'GRASS_MIN_AREA_PARAMETER': 0.0001,
+             'GRASS_OUTPUT_TYPE_PARAMETER': 0,
+             'GRASS_REGION_PARAMETER': None,
+             'GRASS_SNAP_TOLERANCE_PARAMETER': -1,
+             'GRASS_VECTOR_DSCO': '',
+             'GRASS_VECTOR_EXPORT_NOCAT': False,
+             'GRASS_VECTOR_LCO': '',
+             'error': 'memory:',
+             'input': layer,
+             'output': output,
+             'threshold': threshold,
+             'tool': [1],
+             'type': [1]})
     return algorithmOutput['output']
 
 
