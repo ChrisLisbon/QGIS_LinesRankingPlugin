@@ -23,7 +23,7 @@ from qgis.gui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import time
-import os
+import os, string
 from qgis.core import *
 from .preparation import *
 from .graph_processing import overall_call
@@ -49,8 +49,13 @@ class StartScript(QgsTask):
         self.base_dir = os.path.abspath('.')
         if 'C:' in self.base_dir:
             # Generate temporary folder not in C disk
-            self.base_dir = os.path.join('D:', TMP_DIRECTORY_NAME)
-            self.create_base_directory_if_required()
+            available_drives = ['%s:' % d for d in string.ascii_uppercase if
+                                os.path.exists('%s:' % d)]
+            if len(available_drives) >= 2:
+                # There is an alternative:
+                available_drives = list(filter(lambda x: 'C' not in x, available_drives))
+                self.base_dir = os.path.join(available_drives[0], TMP_DIRECTORY_NAME)
+                self.create_base_directory_if_required()
 
         self.attributes_file_path = os.path.join(self.base_dir, 'attributes_temp.csv')
         self.points_file_path = os.path.join(self.base_dir, 'points_temp.csv')
