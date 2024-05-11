@@ -40,5 +40,5 @@ So, you tried all the steps above and nothing worked. It looks like the plugin r
 * **Error logs**: send error logs in txt file format, to save logs, see instructions above
 
 You can use two ways to report the error: 
-- `GitHub issues`: follow [this page](https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin/issues) and make a post
-- `Direct email message`: send message to `mik.sarafanov@gmail.com` with the topic "Lines Ranking plugin issue" and description according to template. Feel free to text me in English and Russian languages
+* `GitHub issues`: follow [this page](https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin/issues) and make a post
+* `Direct email message`: send message to `mik.sarafanov@gmail.com` with the topic "Lines Ranking plugin issue" and description according to template. Feel free to text me in English and Russian languages
