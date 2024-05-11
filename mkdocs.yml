@@ -10,6 +10,7 @@ nav:
           - 'Functionality review': 'usage/functionality_review.md'
           - 'River use case': 'usage/river_case.md'
           - 'Railways use case': 'usage/rails_case.md'
+          - 'Troubleshooting': 'usage/troubleshooting.md'
     - Theoretical issues:
           - 'Vector data': 'theoretical/vector_data.md'
           - 'Brief description': 'theoretical/algorithm.md'
