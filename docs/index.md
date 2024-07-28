@@ -36,6 +36,7 @@ We have written several articles that explain how the plugin works. Feel free in
 
 - [Stream Ordering: How And Why a Geo-Scientist Sometimes Needed to Rank Rivers on a Map](https://medium.com/towards-data-science/stream-ordering-how-and-why-a-geo-scientist-sometimes-needed-to-rank-rivers-on-a-map-360dce356df5) (eng);
 - [The Algorithm for Ranking the Segments of the River Network for Geographic Information Analysis Based on Graphs](https://medium.com/swlh/the-algorithm-for-ranking-the-segments-of-the-river-network-for-geographic-information-analysis-b25cffb0d167?sk=f1475802bd96f8d14c994a6f87f7453d) (eng);
+- [Все реки в порядке: как и зачем в географических науках ранжируют водотоки](https://habr.com/p/830334/) (rus);
 - [Алгоритм ранжирования сегментов речной сети с использованием графов для геоинформационного анализа](https://habr.com/ru/articles/514526/) (rus)
 
 ## Additional materials 
