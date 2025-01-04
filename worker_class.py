@@ -22,15 +22,13 @@
 from qgis.gui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-import time
-import os, string
+import tempfile
+import os
 from qgis.core import *
 from .preparation import *
 from .graph_processing import overall_call
 import processing
 
-
-TMP_DIRECTORY_NAME = 'lines_ranking_tmp_directory'
 
 class StartScript(QgsTask):
     def __init__(self, desc, flags, selectedLayer, pt, cleanTresholdValue,
@@ -46,17 +44,7 @@ class StartScript(QgsTask):
         self.fields_names = fields_names
         self.error_reason = ''
 
-        self.base_dir = os.path.abspath('.')
-        if 'C:' in self.base_dir:
-            # Generate temporary folder not in C disk
-            available_drives = ['%s:' % d for d in string.ascii_uppercase if
-                                os.path.exists('%s:' % d)]
-            if len(available_drives) >= 2:
-                # There is an alternative:
-                available_drives = list(filter(lambda x: 'C' not in x, available_drives))
-                self.base_dir = os.path.join(available_drives[0], TMP_DIRECTORY_NAME)
-                self.create_base_directory_if_required()
-
+        self.base_dir = tempfile.gettempdir()
         self.attributes_file_path = os.path.join(self.base_dir, 'attributes_temp.csv')
         self.points_file_path = os.path.join(self.base_dir, 'points_temp.csv')
         self.original_file_path = os.path.join(self.base_dir, 'original_temp.csv')
@@ -66,38 +54,14 @@ class StartScript(QgsTask):
         self.tmp_after_fixing_geometries = os.path.join(self.base_dir,
                                                         'tmp_lines_ranking_after_fixing_geometries.gpkg')
         self.tmp_after_vclean = os.path.join(self.base_dir, 'tmp_lines_ranking_after_vclean.gpkg')
-        self.remove_tmp_files()
-
-    def create_base_directory_if_required(self):
-        if os.path.exists(self.base_dir) is False:
-            os.mkdir(self.base_dir)
-
-    def remove_base_directory(self):
-        if len(os.listdir(self.base_dir)) < 1 and TMP_DIRECTORY_NAME in self.base_dir:
-            # Remove directory after finishing
-            os.rmdir(self.base_dir)
-
-    def remove_tmp_files(self):
-        if os.path.exists(self.tmp_after_fixing_geometries) is True:
-            os.remove(self.tmp_after_fixing_geometries)
-        if os.path.exists(self.tmp_after_vclean) is True:
-            os.remove(self.tmp_after_vclean)
 
     def run(self):
         try:
             # By default - use intermediate layers
             answer = self._run_ranking(use_intermediate_layers=True)
-            self.remove_tmp_files()
-            self.remove_base_directory()
             return answer
         except Exception as ex:
             self.logText = 'Errors occurred. Re-run algorithm without saving intermediate layers'
-            try:
-                self.remove_tmp_files()
-                self.remove_base_directory()
-            except Exception as ex:
-                pass
-
             answer = self._run_ranking(use_intermediate_layers=False)
             return answer
 
@@ -163,7 +127,6 @@ class StartScript(QgsTask):
         return cleaned_layer, buffer_layer
 
     def _run_ranking(self, use_intermediate_layers: bool = False):
-        self.create_base_directory_if_required()
         response = False
         cleaned_layer = None
         try:
@@ -352,21 +315,13 @@ class StartScript(QgsTask):
                     self.result = outLayerWithAttr
 
             if self.isCanceled():
-                if use_intermediate_layers is True:
-                    del cleaned_layer
-                    self.remove_tmp_files()
-                    self.remove_base_directory()
+                del cleaned_layer
                 return False
             else:
-                if use_intermediate_layers is False:
-                    del cleaned_layer
-                    self.remove_tmp_files()
-                    self.remove_base_directory()
+                del cleaned_layer
                 return True
         except Exception as ex:
             del cleaned_layer
-            self.remove_tmp_files()
-            self.remove_base_directory()
             raise ex
 
     def cancel(self):

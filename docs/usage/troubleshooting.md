@@ -23,7 +23,12 @@ logs through `View` - `Panels` - `Log Messages` and then launch the plugin.
 
 1. Check if you are using the latest version of the plugin. [Plugin versions page](https://plugins.qgis.org/plugins/lines_ranking/#plugin-versions). If not the latest - update;
 2. Make sure the plugin is installed correctly. To do this, put aside your sample data for a few minutes and try using the data (check 'river_example' vector layer from [example_data](https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin/tree/master/example_data) folder) that is in the repository. For example, download layer "river_example.shp" and then follow the instructions in section ["Functionality review"](functionality_review.md). Then proceed to step 3. If you cannot reproduce the example, see step 3 anyway;
-3. When you start QGIS and create a new project, its working directory will by default be located on the same drive where QGIS itself is installed. For example, on the "C:" drive (relevant for Windows). In this case, the plugin will try to find an available drive where it will save intermediate files and if it does not find such a drive (for various reasons), it will save temporary files to the same drive where the project is located, i.e. to the "C:". In case if the rights to save to the "C:" drive are not granted, the plugin will crash with an error. To avoid this, create a folder on another drive, for example, "D:", save the project there, exit. Open the project again and continue working in it;
+3. Create qgis project and save it in the folder. Plugin is utilizing [python tempfile module][https://docs.python.org/3/library/tempfile.html#tempfile.gettempdir],
+   so it is trying to save intermediate files which might appear during plugin execution in temporal folder identified by `gettempdir` function.
+   `gettempdir` determines folder based on some internal logic which might be influenced by QGIS environment.
+   In case the writing permissions for temporal folder (to save something to the "C:" drive for example) are not granted, 
+   the plugin will crash with an error (PermissionError). It might help to create a folder on another drive (if possible), for example, 
+   "D:", save the project there, exit. Open the project again and continue working in it;
 4. Change `Snapping threshold (in map units)` parameter - try, for example, 50, 100, 150.
 5. If you use the geopackage file (`.gpkg`), save it to a `.shp` file and try to run the algorithm again
 
