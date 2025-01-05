@@ -2,7 +2,7 @@
 name=Lines Ranking
 qgisMinimumVersion=3.14
 description=Plugin for ranking lines features based on the position of starting point
-version=2.4.1
+version=2.4.2
 author=Julia Borisova, Mikhail Sarafanov 
 email=yulashka.htm@yandex.ru, mik.sarafanov@gmail.com
 
