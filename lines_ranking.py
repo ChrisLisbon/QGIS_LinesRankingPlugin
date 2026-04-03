@@ -288,7 +288,7 @@ class LinesRanking:
             self.point_names.append(layer.name())
         self.dlg.comboBox_2.addItems(self.point_names)   
         self.dlg.show()
-        result = self.dlg.exec_()
+        result = self.dlg.exec()
         close=self.dlg.close()
         if close:
             self.first_start = True

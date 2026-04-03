@@ -1,23 +1,21 @@
 [general]
 name=Lines Ranking
-qgisMinimumVersion=3.14
-description=Plugin for ranking lines features based on the position of starting point
-version=2.4.2
-author=Julia Borisova, Mikhail Sarafanov 
-email=yulashka.htm@yandex.ru, mik.sarafanov@gmail.com
-
-about=The plugin is designed for ranking segments of linear vector objects using starting point.
-      Can be used for calculations in hydrology (e.g. Strahler, Shreve and Topological stream order) and related geo-sciences.
-      Official plugin documentation: https://linesranking.readthedocs.io/en/latest/
-
+qgisMinimumVersion=4.0
+qgisMaximumVersion=4.99
+description=Plugin for ranking line features based on the position of the starting point
+version=3.0.0
+author=Julia Borisova, Mikhail Sarafanov
+email=yulashka.htm@yandex.ru, mik_sar@mail.ru
+about=The plugin is designed for ranking segments of linear vector objects using a starting point.
+ Can be used for calculations in hydrology, for example Strahler, Shreve, and topological stream order, and in related geoscience tasks.
+ Official plugin documentation: https://linesranking.readthedocs.io/en/latest/
 tracker=https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin/issues
 repository=https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin
-
-hasProcessingProvider=no
-tags=network, network ranking, lines, lines ranking, vector 
 homepage=https://github.com/ChrisLisbon/QGIS_LinesRankingPlugin
 category=Vector
 icon=icon.png
+hasProcessingProvider=no
+tags=network, network ranking, lines, lines ranking, vector
 experimental=False
 deprecated=False
 server=False
