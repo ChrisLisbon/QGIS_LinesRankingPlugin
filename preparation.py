@@ -21,21 +21,10 @@
 
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
-    QgsEllipsoidUtils,
-    QgsProject,
-    QgsMapLayer,
-    QgsWkbTypes,
-    Qgis,
-    QgsApplication,
     QgsFeature,
-    QgsVectorLayer,
-    QgsField,
-    QgsVectorFileWriter,
-    QgsSpatialIndex,
     QgsFeatureRequest,
-    QgsPointXY,
-    QgsDistanceArea,
-    QgsUnitTypes,
+    QgsField,
+    QgsSpatialIndex,
 )
 import processing
 
@@ -61,13 +50,12 @@ def clip_line_to_segment(layer):
             "OUTPUT": 'memory:split_no_attr',
         }
     )
-    clipedVectorLayer = algorithm_output["OUTPUT"]
+    clipped_vector_layer = algorithm_output["OUTPUT"]
 
-    # Setting id field for split layer
     algorithm_output = processing.run(
         'qgis:fieldcalculator',
         {
-            'INPUT': clipedVectorLayer,
+            'INPUT': clipped_vector_layer,
             'FIELD_NAME': 'id',
             'FIELD_TYPE': 1,
             'FIELD_LENGTH': 7,
@@ -92,10 +80,10 @@ def clip_line_to_segment(layer):
             'OUTPUT': 'memory:split_with_attr',
         }
     )
-    attrClipedVectorLayer = algorithm_output["OUTPUT"]
-    attrClipedVectorLayer.commitChanges()
+    attr_clipped_vector_layer = algorithm_output["OUTPUT"]
+    attr_clipped_vector_layer.commitChanges()
 
-    return [clipedVectorLayer, attrClipedVectorLayer]
+    return [clipped_vector_layer, attr_clipped_vector_layer]
 
 
 def clean_gaps(layer, threshold, output='TEMPORARY_OUTPUT'):
@@ -131,39 +119,39 @@ def get_lines_intersections(layer, set_progress_funk):
             "OUTPUT": 'memory:intersection',
         }
     )
-    intersectPointLayer = algorithm_output["OUTPUT"]
+    intersect_point_layer = algorithm_output["OUTPUT"]
 
-    pr = intersectPointLayer.dataProvider()
-    pr.addAttributes([QgsField("geometry", QVariant.String)])
-    intersectPointLayer.updateFields()
-    intersectPointLayer.startEditing()
+    provider = intersect_point_layer.dataProvider()
+    provider.addAttributes([QgsField("geometry", QVariant.String)])
+    intersect_point_layer.updateFields()
+    intersect_point_layer.startEditing()
 
-    all_f = intersectPointLayer.featureCount()
-    for feature in intersectPointLayer.getFeatures():
-        progress = 36 + (int(feature.id()) * 10) / all_f
+    all_features = intersect_point_layer.featureCount()
+    for feature in intersect_point_layer.getFeatures():
+        progress = 36 + (int(feature.id()) * 10) / all_features
         set_progress_funk(progress)
         feature['geometry'] = feature.geometry().asWkt()
-        intersectPointLayer.updateFeature(feature)
+        intersect_point_layer.updateFeature(feature)
 
-    intersectPointLayer.commitChanges()
-    return intersectPointLayer
+    intersect_point_layer.commitChanges()
+    return intersect_point_layer
 
 
-def get_nearest_segmentId(layer, QgsPointXY, set_progress_funk):
-    spIndex = QgsSpatialIndex()
-    all_f = layer.featureCount()
+def get_nearest_segmentId(layer, point_xy, set_progress_funk):
+    spatial_index = QgsSpatialIndex()
+    all_features = layer.featureCount()
 
     for feature in layer.getFeatures():
-        progress = 47 + (int(feature.id()) * 10) / all_f
+        progress = 47 + (int(feature.id()) * 10) / all_features
         set_progress_funk(progress)
-        spIndex.addFeature(feature)
+        spatial_index.addFeature(feature)
 
-    nearestIds = spIndex.nearestNeighbor(QgsPointXY, 1)
-    nearest_feature = layer.getFeatures(QgsFeatureRequest().setFilterFid(nearestIds[0]))
-    ftr = QgsFeature()
-    nearest_feature.nextFeature(ftr)
+    nearest_ids = spatial_index.nearestNeighbor(point_xy, 1)
+    nearest_feature = layer.getFeatures(QgsFeatureRequest().setFilterFid(nearest_ids[0]))
+    feature_result = QgsFeature()
+    nearest_feature.nextFeature(feature_result)
 
-    return ftr["fid"]
+    return feature_result["fid"]
 
 
 def createSpatialIndex(layer):
@@ -194,8 +182,8 @@ def createCleanedBuffer(layer):
 
 
 def joinAttributes(outlayer, reallayer, user_fields_names):
-    prov = reallayer.dataProvider()
-    field_names = [field.name() for field in prov.fields()]
+    provider = reallayer.dataProvider()
+    field_names = [field.name() for field in provider.fields()]
 
     for name in user_fields_names:
         if name in field_names:
@@ -214,5 +202,5 @@ def joinAttributes(outlayer, reallayer, user_fields_names):
             'PREFIX': '',
         }
     )
-    outlayerWithAttributes = algorithm_output["OUTPUT"]
-    return outlayerWithAttributes
+    outlayer_with_attributes = algorithm_output["OUTPUT"]
+    return outlayer_with_attributes

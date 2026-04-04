@@ -43,6 +43,7 @@ class StartScript(QgsTask):
         self.logText = ''
         self.fields_names = fields_names
         self.error_reason = ''
+        self.error_details = ''
 
         self.base_dir = tempfile.gettempdir()
         self.attributes_file_path = os.path.join(self.base_dir, 'attributes_temp.csv')
@@ -51,10 +52,25 @@ class StartScript(QgsTask):
 
     def run(self):
         try:
+            self.error_reason = ''
+            self.error_details = ''
             return self._run_ranking()
         except Exception as ex:
             self.logText = 'Errors occurred'
+            self.error_details = str(ex)
             raise ex
+
+    def _cleanup_temp_csvs(self):
+        for path in [
+            self.points_file_path,
+            self.original_file_path,
+            self.attributes_file_path,
+        ]:
+            try:
+                if os.path.exists(path):
+                    os.remove(path)
+            except Exception:
+                pass
 
     def _ensure_vector_layer(self, layer_or_source, layer_name):
         if isinstance(layer_or_source, QgsVectorLayer):
@@ -73,6 +89,10 @@ class StartScript(QgsTask):
 
         return None
 
+    def _is_grass_v_clean_available(self):
+        registry = QgsApplication.processingRegistry()
+        return registry.algorithmById("grass7:v.clean") is not None
+
     def _fix_geometries_and_v_clean_in_memory(self):
         self.logText = 'Fixing geometries'
         vl = fix_geometries(self.selectedLayer, 'TEMPORARY_OUTPUT')
@@ -88,14 +108,20 @@ class StartScript(QgsTask):
             self.setProgress(5)
             self.logText = 'Filling gaps (v.clean)'
 
+            if not self._is_grass_v_clean_available():
+                self.error_reason = 'grass'
+                self.logText = ''
+                return None, None
+
             try:
                 cleaned_layer = clean_gaps(vl, self.cleanTresholdValue, 'TEMPORARY_OUTPUT')
                 cleaned_layer = self._ensure_vector_layer(cleaned_layer, 'v_clean')
 
                 if cleaned_layer is None:
                     raise Exception('Failed to create cleaned layer')
-            except Exception:
-                self.error_reason = 'grass'
+            except Exception as ex:
+                self.error_reason = 'grass_runtime'
+                self.error_details = str(ex)
                 self.logText = ''
                 return None, None
         else:
@@ -243,9 +269,7 @@ class StartScript(QgsTask):
                     self.setProgress,
                 )
 
-                os.remove(self.points_file_path)
-                os.remove(self.original_file_path)
-                os.remove(self.attributes_file_path)
+                self._cleanup_temp_csvs()
 
                 clipped_vector_layer.selectAll()
                 outLayer = processing.run(
@@ -357,18 +381,21 @@ class StartScript(QgsTask):
         self.logText = ''
 
         if result is False:
-            try:
-                os.remove(self.points_file_path)
-                os.remove(self.original_file_path)
-                os.remove(self.attributes_file_path)
-            except Exception:
-                pass
+            self._cleanup_temp_csvs()
 
             if self.error_reason == 'grass':
                 QMessageBox.critical(
                     None,
                     "Error",
-                    'GRASS modules are not available. Activate GRASS or leave snapping threshold empty',
+                    'GRASS processing algorithm "grass7:v.clean" is not available. '
+                    'Enable the GRASS provider in QGIS or leave the snapping threshold empty.',
+                )
+            elif self.error_reason == 'grass_runtime':
+                QMessageBox.critical(
+                    None,
+                    "Error",
+                    'GRASS v.clean failed during execution. '
+                    'Try leaving the snapping threshold empty or check whether GRASS is properly configured.',
                 )
 
         if result is True:
@@ -390,7 +417,8 @@ class Worker(QObject):
         self.fields_names = fields_names
 
     def setResult(self, r):
-        QgsProject.instance().addMapLayer(r)
+        if r is not None:
+            QgsProject.instance().addMapLayer(r)
         self.progress = 0
 
     def progressSet(self, progress, logText):
