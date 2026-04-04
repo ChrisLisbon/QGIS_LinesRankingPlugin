@@ -89,6 +89,17 @@ class StartScript(QgsTask):
 
         return None
 
+    def _ensure_fid_field(self, layer):
+        if layer is None:
+            return None
+
+        if layer.fields().indexFromName('fid') == -1:
+            provider = layer.dataProvider()
+            provider.addAttributes([QgsField("fid", QVariant.Int)])
+            layer.updateFields()
+
+        return layer
+
     def _is_grass_v_clean_available(self):
         registry = QgsApplication.processingRegistry()
         return registry.algorithmById("grass7:v.clean") is not None
@@ -114,23 +125,26 @@ class StartScript(QgsTask):
                 return None, None
 
             try:
-                cleaned_layer = clean_gaps(vl, self.cleanTresholdValue, 'TEMPORARY_OUTPUT')
+                layer_for_grass = prepare_layer_for_grass(vl)
+
+                cleaned_layer = clean_gaps(
+                    layer_for_grass,
+                    self.cleanTresholdValue,
+                    'TEMPORARY_OUTPUT',
+                )
                 cleaned_layer = self._ensure_vector_layer(cleaned_layer, 'v_clean')
 
                 if cleaned_layer is None:
                     raise Exception('Failed to create cleaned layer')
+
+                cleaned_layer = self._ensure_fid_field(cleaned_layer)
             except Exception as ex:
                 self.error_reason = 'grass_runtime'
                 self.error_details = str(ex)
                 self.logText = ''
                 return None, None
         else:
-            if vl.fields().indexFromName('fid') == -1:
-                pr = vl.dataProvider()
-                pr.addAttributes([QgsField("fid", QVariant.Int)])
-                vl.updateFields()
-
-            cleaned_layer = vl
+            cleaned_layer = self._ensure_fid_field(vl)
 
         buffer_layer = createCleanedBuffer(cleaned_layer)
         buffer_layer.setProviderEncoding(u'UTF-8')
@@ -285,10 +299,10 @@ class StartScript(QgsTask):
             else:
                 self.setProgress(89)
                 self.logText = 'Creating attributes table'
-                pr = outLayer.dataProvider()
+                provider = outLayer.dataProvider()
 
                 for field_name in self.fields_names:
-                    pr.addAttributes([QgsField(field_name, QVariant.Int)])
+                    provider.addAttributes([QgsField(field_name, QVariant.Int)])
 
                 outLayer.updateFields()
                 outLayer.startEditing()
@@ -334,6 +348,8 @@ class StartScript(QgsTask):
 
                 outLayer.commitChanges()
                 createSpatialIndex(outLayer)
+                createSpatialIndex(buffer_layer)
+
                 outLayerWithAttr = joinAttributes(outLayer, buffer_layer, self.fields_names)
                 outLayerWithAttr.setProviderEncoding(u'UTF-8')
                 outLayerWithAttr.dataProvider().setEncoding(u'UTF-8')
@@ -395,7 +411,7 @@ class StartScript(QgsTask):
                     None,
                     "Error",
                     'GRASS v.clean failed during execution. '
-                    'Try leaving the snapping threshold empty or check whether GRASS is properly configured.',
+                    'Try leaving the snapping threshold empty, or check whether GRASS is configured correctly.',
                 )
 
         if result is True:

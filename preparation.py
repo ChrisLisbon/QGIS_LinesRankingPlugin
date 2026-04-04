@@ -25,8 +25,87 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsField,
     QgsSpatialIndex,
+    QgsVectorLayer,
+    QgsWkbTypes,
 )
 import processing
+
+
+def _get_safe_renamed_fid_name(layer):
+    existing_names = {field.name() for field in layer.fields()}
+    candidate = 'source_fid_for_lr'
+    index = 1
+
+    while candidate in existing_names:
+        candidate = f'source_fid_for_lr_{index}'
+        index += 1
+
+    return candidate
+
+
+def prepare_layer_for_grass(layer):
+    """
+    Create a memory copy of the layer for GRASS processing.
+
+    If the source layer contains a field named 'fid', rename it to a safe name
+    to avoid duplicate fid conflicts during GRASS -> GPKG export.
+    """
+    geometry_type = QgsWkbTypes.displayString(layer.wkbType())
+    crs_authid = layer.crs().authid()
+
+    if crs_authid:
+        uri = f'{geometry_type}?crs={crs_authid}'
+    else:
+        uri = geometry_type
+
+    prepared_layer = QgsVectorLayer(uri, f'{layer.name()}_grass_input', 'memory')
+    if not prepared_layer.isValid():
+        raise Exception('Failed to create temporary layer for GRASS processing')
+
+    renamed_fid_name = _get_safe_renamed_fid_name(layer)
+
+    output_fields = []
+    source_field_names = []
+    target_field_names = []
+
+    for field in layer.fields():
+        source_field_names.append(field.name())
+
+        if field.name() == 'fid':
+            renamed_field = QgsField(
+                renamed_fid_name,
+                field.type(),
+                field.typeName(),
+                field.length(),
+                field.precision(),
+                field.comment(),
+            )
+            output_fields.append(renamed_field)
+            target_field_names.append(renamed_fid_name)
+        else:
+            output_fields.append(field)
+            target_field_names.append(field.name())
+
+    provider = prepared_layer.dataProvider()
+    provider.addAttributes(output_fields)
+    prepared_layer.updateFields()
+
+    new_features = []
+    for feature in layer.getFeatures():
+        new_feature = QgsFeature(prepared_layer.fields())
+        new_feature.setGeometry(feature.geometry())
+
+        new_attributes = []
+        for source_field_name in source_field_names:
+            new_attributes.append(feature[source_field_name])
+
+        new_feature.setAttributes(new_attributes)
+        new_features.append(new_feature)
+
+    provider.addFeatures(new_features)
+    prepared_layer.updateExtents()
+
+    return prepared_layer
 
 
 def fix_geometries(layer, output='TEMPORARY_OUTPUT'):
@@ -99,7 +178,7 @@ def clean_gaps(layer, threshold, output='TEMPORARY_OUTPUT'):
             'GRASS_VECTOR_DSCO': '',
             'GRASS_VECTOR_EXPORT_NOCAT': False,
             'GRASS_VECTOR_LCO': '',
-            'error': 'memory:',
+            'error': 'TEMPORARY_OUTPUT',
             'input': layer,
             'output': output,
             'threshold': threshold,
